@@ -1,0 +1,11 @@
+# Setup software
+eval $(thefuck --alias)
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# Setup utilities
+alias update="sudo apt-get update; sudo apt-get upgrade -y; sudo apt-get autoremove; sudo apt-get autoclean; sudo snap refresh; brew upgrade"
+my_ip="neofetch public_ip; neofetch private_ip"
+
+# Setup small programs
+alias bon_matin="source ~/.zshrc"
+
