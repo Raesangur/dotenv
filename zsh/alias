@@ -8,6 +8,8 @@ alias my_ip="neofetch public_ip; neofetch local_ip"
 alias restart="sudo reboot"
 alias fucking=sudo
 
+alias git_gud="~/dotfiles/git/git_gud.sh"
+
 # Setup small programs
 alias bon_matin="source ~/.zshrc"
 
