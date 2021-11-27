@@ -15,7 +15,23 @@ unsetopt prompt_cr prompt_sp
 HIST_STAMPS="yyyy-mm-dd"
 
 # zsh plugins
-plugins=(git)
+plugins=(
+# plugins softwares
+docker
+git
+mvn
+node
+npm
+python
+
+
+# plugins tools
+emoji
+web-search
+
+# plugins misc
+sudo
+)
 
 # Apply zsh config
 source $ZSH/oh-my-zsh.sh
