@@ -35,57 +35,42 @@ git_param=false
 neofetch_param=false
 btop_param=false
 
+function echo_verbose() {
+    if $verbose_mode
+    then
+        echo $1
+    fi
+}
 
 function create_symbolic_links() {
     if $no_symlinks
     then
-        if $verbose_mode
-        then
-            echo "Skipping symbolic links creation"
-        fi
+        echo_verbose "Skipping symbolic links creation"
     else
         echo "Creating symbolic links..."
 
         if $zsh_param
         then
-            if $verbose_mode
-            then
-                echo "Creating .zshrc symlink from ~/.zshrc to ~/dotfiles/zsh/.zshrc"
-            fi
+            echo_verbose "Creating .zshrc symlink from ~/.zshrc to ~/dotfiles/zsh/.zshrc"
             ln -s ~/dotfiles/zsh/.zshrc ~/.zshrc
         else
-            if $verbose_mode
-            then
-                echo "Skipping zsh symlinks configuration"
-            fi
+            echo_verbose "Skipping zsh symlinks configuration"
         fi
 
         if $neofetch_param
         then
-            if $verbose_mode
-            then
-                echo "Creating neofetch symlink from ~/.config/neofetch/config.conf to ~/dotfiles/neofetch/config.conf"
-            fi
+            echo_verbose "Creating neofetch symlink from ~/.config/neofetch/config.conf to ~/dotfiles/neofetch/config.conf"
             ln -s ~/dotfiles/neofetch/config.conf ~/.config/neofetch/config.conf
         else
-            if $verbose_mode
-            then
-                echo "Skipping neofetch symlink configuration"
-            fi
+            echo_verbose "Skipping neofetch symlink configuration"
         fi
 
         if $btop_param
         then
-            if $verbose_mode
-            then
-                echo "Creating btop symlink from ~/.config/btop/btop.conf to ~/dotfiles/btop/btop.conf"
-            fi
+            echo_verbose "Creating btop symlink from ~/.config/btop/btop.conf to ~/dotfiles/btop/btop.conf"
             ln -s ~/dotfiles/btop/btop.conf ~/.config/btop/btop.conf
         else
-            if $verbose_mode
-            then
-                echo "Skipping btop symlink configuration"
-            fi
+            echo_verbose "Skipping btop symlink configuration"
         fi
     fi
 }
