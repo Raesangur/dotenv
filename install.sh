@@ -35,9 +35,27 @@ neofetch_param=false
 
 
 function create_symbolic_links() {
-    echo "Creating symbolic links..."
-    ln -s ~/dotfiles/zsh/.zshrc ~/.zshrc
-    ln -s ~/dotfiles/neofetch/config.conf ~/.config/neofetch/config.conf
+    if $no_symlinks
+    then
+        if $verbose_mode
+        then
+            echo "Skipping symbolic links creation"
+        fi
+    else
+        echo "Creating symbolic links..."
+
+        if $verbose_mode
+        then
+            echo "Creating .zshrc symlink from ~/.zshrc to ~/dotfiles/zsh/.zshrc"
+        fi
+        ln -s ~/dotfiles/zsh/.zshrc ~/.zshrc
+
+        if $verbose_mode
+        then
+            echo "Creating neofetch symlink from ~/.config/neofetch/config.conf to ~/dotfiles/neofetch/config.conf"
+        fi
+        ln -s ~/dotfiles/neofetch/config.conf ~/.config/neofetch/config.conf
+    fi
 }
 
 function display_parameters() {
