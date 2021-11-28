@@ -12,6 +12,7 @@ function show_usage() {
     printf "\t zsh              Install zsh config files\n"
     printf "\t git              Install git config files and setup credientials on system\n"
     printf "\t neofetch         Install neofetch config files\n"
+    printf "\t btop             Install btop config files\n"
     printf "\tExtra Options: \n"
     printf "\t --no-symlinks    Skip configuration of symbolic links\n"
     printf "\t --no-git-creds   Skip configuration of git credentials\n"
@@ -32,6 +33,7 @@ all_param=true
 zsh_param=false
 git_param=false
 neofetch_param=false
+btop_param=false
 
 
 function create_symbolic_links() {
@@ -44,17 +46,47 @@ function create_symbolic_links() {
     else
         echo "Creating symbolic links..."
 
-        if $verbose_mode
+        if $zsh_param
         then
-            echo "Creating .zshrc symlink from ~/.zshrc to ~/dotfiles/zsh/.zshrc"
+            if $verbose_mode
+            then
+                echo "Creating .zshrc symlink from ~/.zshrc to ~/dotfiles/zsh/.zshrc"
+            fi
+            ln -s ~/dotfiles/zsh/.zshrc ~/.zshrc
+        else
+            if $verbose_mode
+            then
+                echo "Skipping zsh symlinks configuration"
+            fi
         fi
-        ln -s ~/dotfiles/zsh/.zshrc ~/.zshrc
 
-        if $verbose_mode
+        if $neofetch_param
         then
-            echo "Creating neofetch symlink from ~/.config/neofetch/config.conf to ~/dotfiles/neofetch/config.conf"
+            if $verbose_mode
+            then
+                echo "Creating neofetch symlink from ~/.config/neofetch/config.conf to ~/dotfiles/neofetch/config.conf"
+            fi
+            ln -s ~/dotfiles/neofetch/config.conf ~/.config/neofetch/config.conf
+        else
+            if $verbose_mode
+            then
+                echo "Skipping neofetch symlink configuration"
+            fi
         fi
-        ln -s ~/dotfiles/neofetch/config.conf ~/.config/neofetch/config.conf
+
+        if $btop_param
+        then
+            if $verbose_mode
+            then
+                echo "Creating btop symlink from ~/.config/btop/btop.conf to ~/dotfiles/btop/btop.conf"
+            fi
+            ln -s ~/dotfiles/btop/btop.conf ~/.config/btop/btop.conf
+        else
+            if $verbose_mode
+            then
+                echo "Skipping btop symlink configuration"
+            fi
+        fi
     fi
 }
 
@@ -72,6 +104,7 @@ printf "\t-----\n"
 printf "\tzsh:         $zsh_param\n"
 printf "\tgit:         $git_param\n"
 printf "\tneofetch:    $neofetch_param\n"
+printf "\tbtop:        $btop_param\n"
 fi
 
 return 0;
@@ -88,6 +121,7 @@ return 0;
 if [[ "$@" == *"--verbose"* ]] || [[ "$@" == *"-v"* ]]
 then
     verbose_mode=true
+    echo $@
 fi
 if [[ "$@" == *"--help"* ]] || [[ "$@" == *"-h"* ]]
 then
@@ -119,6 +153,11 @@ then
     neofetch_param=true
     all_param=false
 fi
+if [[ "$@" == *"btop"* ]]
+then
+    btop_param=true
+    all_param=false
+fi
 
 
 if $all_param
@@ -126,6 +165,7 @@ then
     zsh_param=true
     git_param=true
     neofetch_param=true
+    btop_param=true
 fi
 
 
