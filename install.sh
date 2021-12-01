@@ -13,6 +13,7 @@ function show_usage() {
     printf "\t git              Install git config files and setup credientials on system\n"
     printf "\t neofetch         Install neofetch config files\n"
     printf "\t btop             Install btop config files\n"
+    printf "\t kde              Install kde config files\n"
     printf "\tExtra Options: \n"
     printf "\t --no-symlinks    Skip configuration of symbolic links\n"
     printf "\t --no-git-creds   Skip configuration of git credentials\n"
@@ -34,6 +35,7 @@ zsh_param=false
 git_param=false
 neofetch_param=false
 btop_param=false
+kde_param=false
 
 function echo_verbose() {
     if $verbose_mode
@@ -68,6 +70,17 @@ function create_symbolic_links() {
         else
             echo_verbose "Skipping btop symlink configuration"
         fi
+        if $kde_param ; then
+           echo_verbose "Creating kde symlinks"
+           echo_verbose "Creating kdeglobals symlink from ~/.config/kdeglobals to ~/dotfiles/kde/kdeglobals"
+	   ln -s ~/dotfiles/kde/kdeglobals ~/.config/kdeglobals
+           echo_verbose "Creating kde shortcuts symlink from ~/.config/kglobalshortcutsrc to ~/dotfiles/kde/kglobalshortcutsrc"
+           ln -s ~/dotfiles/kde/kglobalshortcutsrc ~/.config/kglobalshortcutsrc
+           echo_verbose "Creating kde hotkeys symlink from ~/.config/khotkeysrc to ~/dotfiles/kde/khotkeysrc"
+           ln -s ~/dotfiles/kde/khotkeysrc ~/.config/khotkeysrc
+        else
+           echo_verbose "Skipping kde symlink configuration"
+        fi
     fi
 }
 
@@ -86,6 +99,7 @@ printf "\tzsh:         $zsh_param\n"
 printf "\tgit:         $git_param\n"
 printf "\tneofetch:    $neofetch_param\n"
 printf "\tbtop:        $btop_param\n"
+printf "\tkde:         $kde_param\n"
 fi
 
 return 0;
@@ -131,6 +145,10 @@ if [[ "$@" == *"btop"* ]] ; then
     btop_param=true
     all_param=false
 fi
+if [[ "$@" == *"kde"* ]] ; then
+    kde_param=true
+    all_param=false
+fi
 
 
 if $all_param ; then
@@ -138,6 +156,7 @@ if $all_param ; then
     git_param=true
     neofetch_param=true
     btop_param=true
+    kde_param=true
 fi
 
 
