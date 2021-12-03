@@ -84,6 +84,33 @@ function create_symbolic_links() {
     fi
 }
 
+function create_github_config() {
+    if $no_git_creds ; then
+        echo_verbose "Skipping github credientials configuration"
+    else
+        echo "Configuring github credientials"
+        echo "Set github credentials email address & username"
+        read git_creds_email -p "Email"
+        read git_creds_user -p "Username"
+        echo_verbose "Creating SSH key"
+	ssh-keygen -t ed25519 -C $git_creds_email
+
+        echo_verbose "Starting SSH agent and adding newly generated SSH key"
+        eval "$(ssh-agent -s)"
+        ssh-add ~/.ssh/id_ed25519
+
+        echo "Copy the following line and press ENTER to open Github Settings in a browser"
+        cat ~/.ssh/id_ed25519.pub
+        read -p "Press ENTER to continue to https://www.github.com/settings/ssh/new"
+        echo_verbose "Opening github settings page in default browser"
+        xdg-open "https://www.github.com/settings/ssh/new"	# xdg-open opens the default browser
+
+        echo_verbose "Setting up git email and username in ~/.gitconfig"
+        git config --global user.email $git_creds_email
+        git config --global user.name $git_creds_user
+    fi
+}
+
 function display_parameters() {
 if $verbose_mode; 
 then
@@ -167,5 +194,6 @@ else
     display_parameters
 
     create_symbolic_links
+    create_github_config
     echo "Enter source ~/.zshrc to configure zsh"
 fi
