@@ -17,6 +17,11 @@ function show_usage() {
     printf "\tExtra Options: \n"
     printf "\t --no-symlinks    Skip configuration of symbolic links\n"
     printf "\t --no-git-creds   Skip configuration of git credentials\n"
+    printf "\t --no-packages    Skip installation of apt, brew and snap packages\n"
+    printf "\t --no-apt         Skip installation of apt packages\n"
+    printf "\t --no-brew        Skip installation of brew and brew packages\n"
+    printf "\t --no-snap        Skip installation of snap and snap packages\n"
+    printf "\t --apt-necessary  Install only necessary apt packages\n"
 
     return 0;
 }
@@ -28,6 +33,10 @@ verbose_mode=false
 # Extra Options
 no_symlinks=false
 no_git_creds=false
+no_apt=false
+no_brew=false
+no_snap=false
+apt_necessary=false
 
 # Parameters
 all_param=true
@@ -43,6 +52,7 @@ function echo_verbose() {
         echo $1
     fi
 }
+
 
 function create_symbolic_links() {
     if $no_symlinks ; then
@@ -111,6 +121,53 @@ function create_github_config() {
     fi
 }
 
+function install_necessary_apt_packages() {
+}
+
+function install_apt_packages() {
+}
+
+function install_brew() {
+}
+
+function install_brew_packages() {
+}
+
+function install_snap() {
+}
+
+function install_snap_packages() {
+}
+
+function install_packages() {
+    if $no_apt ; then
+        echo_verbose "Skipping apt-packages installation"
+        echo_verbose "Some of the installation script may fail without some of the necessary packages"
+        echo_verbose "See --apt-necessary option"
+    else
+        install_necessary_apt_packages()
+        if $apt_necessary ; then
+            echo_verbose "Skipping installation of non-necessary apt-packages"
+        else
+            install_apt_packages()
+        fi
+    fi
+
+    if $no_brew ; then
+        echo_verbose "Skipping installation of brew and brew packages"
+    else
+        install_brew()
+        install_brew_packages()
+    fi
+
+    if $no_snap ; then
+        echo_verbose "Skipping installation of snap and snap packages"
+    else
+        install_snap()
+        install_snap_packages()
+    fi
+}
+
 function display_parameters() {
 if $verbose_mode; 
 then
@@ -121,6 +178,10 @@ printf "\tVerbose:     $verbose_mode\n"
 printf "\t-----\n"
 printf "\tno-symlinks: $no_symlinks\n"
 printf "\tno-git-creds:$no_git_creds\n"
+printf "\tno-apt:      $no_apt\n"
+printf "\tno_brew:     $no_brew\n"
+printf "\tno_snap:     $no_snap\n"
+printf "\tapt_necess:  $apt_necessary\n"
 printf "\t-----\n"
 printf "\tzsh:         $zsh_param\n"
 printf "\tgit:         $git_param\n"
@@ -153,6 +214,23 @@ if [[ "$@" == *"--no-symlinks"* ]] ; then
 fi
 if [[ "$@" == *"--no-git-creds"* ]] ; then
     no_git_creds=true
+fi
+if [[ "$@" == *"--no-packages"* ]] ; then
+    no_apt=true
+    no_brew=true
+    no_snap=true
+fi
+if [[ "$@" == *"--no-apt"* ]] ; then
+    no_apt=true
+fi
+if [[ "$@" == *"--no-brew"* ]] ; then
+    no_brew=true
+fi
+if [[ "$@" == *"--no-snap"* ]] ; then
+    no_snap=true
+fi
+if [[ "$@" == *"--apt-necessary"* ]] ; then
+    apt_necessary=true
 fi
 
 # Parameters
@@ -193,6 +271,7 @@ if $display_help ; then
 else
     display_parameters
 
+    install_packages
     create_symbolic_links
     create_github_config
     echo "Enter source ~/.zshrc to configure zsh"
