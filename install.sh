@@ -22,7 +22,6 @@ function show_usage() {
     printf "\t --no-brew        Skip installation of brew and brew packages\n"
     printf "\t --no-snap        Skip installation of snap and snap packages\n"
     printf "\t --apt-necessary  Install only necessary apt packages\n"
-
     return 0;
 }
 
@@ -122,21 +121,37 @@ function create_github_config() {
 }
 
 function install_necessary_apt_packages() {
+    echo_verbose "Installing necessary apt packages"
+    if $verbose_mode ; then
+        xargs -a ~/dotfiles/packages/apt-packages-necessary sudo apt-get install -y
+    else 
+        xargs -a ~/dotfiles/packages/apt-packages-necessary sudo apt-get install -y > /dev/null
+    fi
 }
 
 function install_apt_packages() {
+    echo_verbose "Installing apt packages"
+    if $verbose_mode ; then
+        xargs -a ~/dotfiles/packages/apt-packages sudo apt-get install -y
+    else 
+        xargs -a ~/dotfiles/packages/apt-packages sudo apt-get install -y > /dev/null
+    fi
 }
 
 function install_brew() {
+    echo "This function needs to be implemented"
 }
 
 function install_brew_packages() {
+    echo "This function needs to be implemented"
 }
 
 function install_snap() {
+    echo "This function needs to be implemented"
 }
 
 function install_snap_packages() {
+    echo "This function needs to be implemented"
 }
 
 function install_packages() {
@@ -145,26 +160,35 @@ function install_packages() {
         echo_verbose "Some of the installation script may fail without some of the necessary packages"
         echo_verbose "See --apt-necessary option"
     else
-        install_necessary_apt_packages()
+        echo_verbose "Updating apt repository"
+        if $verbose_mode ; then
+            sudo apt-get update
+            sudo apt-get upgrade -y
+        else
+            sudo apt-get update > /dev/null
+            sudo apt-get upgrade -y > /dev/null
+        fi
+
+        install_necessary_apt_packages
         if $apt_necessary ; then
             echo_verbose "Skipping installation of non-necessary apt-packages"
         else
-            install_apt_packages()
+            install_apt_packages
         fi
     fi
 
     if $no_brew ; then
         echo_verbose "Skipping installation of brew and brew packages"
     else
-        install_brew()
-        install_brew_packages()
+        install_brew
+        install_brew_packages
     fi
 
     if $no_snap ; then
         echo_verbose "Skipping installation of snap and snap packages"
     else
-        install_snap()
-        install_snap_packages()
+        install_snap
+        install_snap_packages
     fi
 }
 
