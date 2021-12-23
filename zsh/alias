@@ -4,10 +4,11 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 alias bat=batcat
 
 # Setup utilities
-alias update="sudo apt-get update; sudo apt-get upgrade -y; sudo apt-get autoremove; sudo apt-get autoclean; sudo snap refresh; brew upgrade; npm update"
+alias update="sudo apt-get update; sudo apt-get upgrade -y; sudo apt-get dist-upgrade -y; sudo apt-get autoremove; sudo apt-get autoclean; sudo snap refresh; brew upgrade; npm update"
 alias my_ip="neofetch public_ip; neofetch local_ip"
 alias restart="sudo reboot"
 alias fucking=sudo
+alias please=sudo
 
 alias git_gud="~/dotfiles/git/git_gud.sh"
 

@@ -5,6 +5,7 @@ function show_usage() {
     printf "\n"
     printf "\tOptions: \n"
     printf "\t -v | --verbose   Display more informations during execution\n"
+    printf "\t -d | --debug     Display even more debug information during execution\n"
     printf "\t -h | --help      Display this menu\n"
     printf "\n"
     printf "\tParameters: \n"
@@ -28,6 +29,7 @@ function show_usage() {
 # Options
 display_help=false
 verbose_mode=false
+debug_mode=false
 
 # Extra Options
 no_symlinks=false
@@ -46,12 +48,16 @@ btop_param=false
 kde_param=false
 
 function echo_verbose() {
-    if $verbose_mode
-    then
+    if $verbose_mode ; then
         echo $1
     fi
 }
 
+function echo_debug() {
+    if $debug_mode ; then
+        echo $1
+    fi
+}
 
 function create_symbolic_links() {
     if $no_symlinks ; then
@@ -122,36 +128,66 @@ function create_github_config() {
 
 function install_necessary_apt_packages() {
     echo_verbose "Installing necessary apt packages"
-    if $verbose_mode ; then
+    if $debug_mode ; then
         xargs -a ~/dotfiles/packages/apt-packages-necessary sudo apt-get install -y
-    else 
+    else
         xargs -a ~/dotfiles/packages/apt-packages-necessary sudo apt-get install -y > /dev/null
     fi
 }
 
 function install_apt_packages() {
     echo_verbose "Installing apt packages"
-    if $verbose_mode ; then
+    if $debug_mode ; then
         xargs -a ~/dotfiles/packages/apt-packages sudo apt-get install -y
-    else 
+    else
         xargs -a ~/dotfiles/packages/apt-packages sudo apt-get install -y > /dev/null
     fi
 }
 
 function install_brew() {
-    echo "This function needs to be implemented"
+    if ! command -v brew &> /dev/null ; then
+        echo_verbose "Brew not found, installing brew"
+        if $debug_mode ; then
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        else
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" > /dev/null
+        fi
+    else
+        echo_verbose "Brew found"
+    fi
 }
 
 function install_brew_packages() {
-    echo "This function needs to be implemented"
+    echo_verbose "Installing brew packages"
+    if $debug_mode ; then
+        xargs -a ~/dotfiles/packages/brew-packages sudo brew install
+    else
+        xargs -a ~/dotfiles/packages/brew-packages sudo brew install > /dev/null
+    fi
 }
 
 function install_snap() {
-    echo "This function needs to be implemented"
+    if ! command -v snap &> /dev/null ; then
+        echo_verbose "Snap not found, installing snap"
+        sudo snap set system experimental.parallel-instances=true
+        if $debug_mode ; then
+            sudo apt-get install snapd -y
+        else
+            sudo apt-get install snapd -y > /dev/null
+        fi
+    else
+        echo_verbose "Snap found"
+    fi
 }
 
 function install_snap_packages() {
-    echo "This function needs to be implemented"
+    echo_verbose "Installing snap packages"
+    sudo snap set system experimental.parallel-instances=true
+    if $debug_mode ; then
+        xargs -a ~/dotfiles/packages/snap-packages sudo snap install
+    else
+        xargs -a ~/dotfiles/packages/snap-packages sudo snap install > /dev/null
+    fi
 }
 
 function install_packages() {
@@ -161,7 +197,7 @@ function install_packages() {
         echo_verbose "See --apt-necessary option"
     else
         echo_verbose "Updating apt repository"
-        if $verbose_mode ; then
+        if $debug_mode ; then
             sudo apt-get update
             sudo apt-get upgrade -y
         else
@@ -199,6 +235,7 @@ then
 printf "Verbose mode, options and parameters:\n"
 printf "\tHelp:        $display_help\n"
 printf "\tVerbose:     $verbose_mode\n"
+printf "\tDebug:       $debug_mode\n"
 printf "\t-----\n"
 printf "\tno-symlinks: $no_symlinks\n"
 printf "\tno-git-creds:$no_git_creds\n"
@@ -225,6 +262,11 @@ return 0;
 # Get values of all parameters
 
 # Options:
+if [[ "$@" == *"--debug"* ]] || [[ "$@" == *"-d"* ]] ; then
+    debug_mode=true
+    verbose_mode=true
+    echo $@
+fi
 if [[ "$@" == *"--verbose"* ]] || [[ "$@" == *"-v"* ]] ; then
     verbose_mode=true
     echo $@
@@ -298,5 +340,8 @@ else
     install_packages
     create_symbolic_links
     create_github_config
-    echo "Enter source ~/.zshrc to configure zsh"
+
+    if $zsh ; then
+        echo "Enter source ~/.zshrc to configure zsh"
+    fi
 fi
