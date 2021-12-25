@@ -49,6 +49,14 @@ bindkey '5~' kill-word
 # Setup shortcut to wine 'C:\' folder
 hash -d wine=/home/pascal/.wine/drive_c
 
+# Adding function pathadd to add a folder to path if it doesn't already exists
+# https://superuser.com/a/39995
+pathadd() {
+    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+        PATH="${PATH:+"$PATH:"}$1"
+    fi
+}
+
 # Display welcome message on shell startup
 #~/scripts/welcome.sh
 source ~/dotfiles/zsh/welcome
