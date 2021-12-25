@@ -290,6 +290,7 @@ function setup_kde() {
             echo "konsave not found, please install konsave using pip install konsave, and add it to PATH"
         else
             konsave -i ~/dotfiles/kde/Raesangur.knsv
+            konsave -a Raesangur
         fi
     else
         echo_verbose "Skipping setup of KDE profiles and settings"
@@ -351,6 +352,7 @@ if [[ "$@" == *"--no-packages"* ]] ; then
     no_apt=true
     no_brew=true
     no_snap=true
+    no_pip=true
 fi
 if [[ "$@" == *"--no-apt"* ]] ; then
     no_apt=true
@@ -414,8 +416,9 @@ else
     install_packages
     create_symbolic_links
     create_github_config
+    setup_kde
 
-    if $zsh ; then
+    if $zsh_param ; then
         echo_verbose "Making zsh default shell"
         chsh -s $(which zsh)
         echo "Enter source ~/.zshrc to configure zsh"
