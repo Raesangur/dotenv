@@ -284,6 +284,18 @@ function install_packages() {
     fi
 }
 
+function setup_kde() {
+    if $kde_param ; then
+        if ! command -v konsave &> /dev/null ; then
+            echo "konsave not found, please install konsave using pip install konsave, and add it to PATH"
+        else
+            konsave -i ~/dotfiles/kde/Raesangur.knsv
+        fi
+    else
+        echo_verbose "Skipping setup of KDE profiles and settings"
+    fi
+}
+
 function display_parameters() {
     if $debug_mode ; then
         printf "Verbose mode, options and parameters:\n"
