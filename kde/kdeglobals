@@ -145,7 +145,7 @@ shadeSortColumn=true
 widgetStyle=Breeze
 
 [Icons]
-Theme=candy-icons
+Theme=Shiny-Dark-Icons
 
 [KDE]
 ColorScheme=BreezeLight
@@ -170,7 +170,7 @@ Sort by=Name
 Sort directories first=true
 Sort reversed=false
 Speedbar Width=138
-View Style=DetailTree
+View Style=Tree
 
 [KScreen]
 ScaleFactor=1.25

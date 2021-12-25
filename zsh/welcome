@@ -10,7 +10,7 @@ print -P -n "@@@@@@@@@@@@   @@@@@@@@@@@    %F{red}&&&&&&&&&&%f   ";  neofetch te
 print -P    "@@@@@@@@@@@@      @@@@@       %F{red}&&&&&&&&&&%f   ";
 print -P -n "@@@@@@@@@@@@                  %F{red}&&&&&&&&&&%f   ";  neofetch cpu --cpu_cores off --cpu_speed off
 print -P -n "@@@@@@@@@@@@                  %F{red}&&&&&&&&&&%f   ";  neofetch memory
-print -P -n "@@@@@@@@@@@@                  %F{red}&&&&&&&&&&%f   ";  neofetch battery
+print -P -n "@@@@@@@@@@@@                  %F{red}&&&&&&&&&&%f   ";  if neofetch battery | grep -q 'battery' ; then neofetch battery ; else ; echo "" ; fi
 print -P    "@@@@@@@@@@@@                  %F{red}&&&&&&&&&&%f   "
 print -P -n "@@@@@@@@@@@@                  %F{red}&&&&&&&&&&%f   ";  neofetch local_ip
 print -P -n "@@@@@@@@@@@@                  %F{red}&&&&&&&&&&%f   ";  neofetch public_ip

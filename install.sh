@@ -59,6 +59,24 @@ function echo_debug() {
     fi
 }
 
+function make_dir() {
+    if $debug_mode ; then
+        echo "Trying to create $1 directory"
+        mkdir $1
+    else
+        mkdir $1 > /dev/null
+    fi
+}
+
+function create_symbolic_link() {
+    echo_verbose "Creating $3 symlink from $1 to $2"
+    if test -f "$1" ; then
+        echo_verbose "File already exists, replacing"
+        rm $1
+    fi
+    ln -s $2 $1
+}
+
 function create_symbolic_links() {
     if $no_symlinks ; then
         echo_verbose "Skipping symbolic links creation"
@@ -66,35 +84,30 @@ function create_symbolic_links() {
         echo "Creating symbolic links..."
 
         if $zsh_param ; then
-            echo_verbose "Creating .zshrc symlink from ~/.zshrc to ~/dotfiles/zsh/.zshrc"
-            ln -s ~/dotfiles/zsh/.zshrc ~/.zshrc
+            create_symbolic_link ~/.zshrc ~/dotfiles/zsh/.zshrc .zshrc
         else
             echo_verbose "Skipping zsh symlinks configuration"
         fi
 
         if $neofetch_param ; then
-            echo_verbose "Creating neofetch symlink from ~/.config/neofetch/config.conf to ~/dotfiles/neofetch/config.conf"
-            ln -s ~/dotfiles/neofetch/config.conf ~/.config/neofetch/config.conf
+            make_dir ~/.config/neofetch
+            create_symbolic_link ~/.config/neofetch/config.conf ~/dotfiles/neofetch/config.conf neofetch
         else
             echo_verbose "Skipping neofetch symlink configuration"
         fi
 
         if $btop_param ; then
-            echo_verbose "Creating btop symlink from ~/.config/btop/btop.conf to ~/dotfiles/btop/btop.conf"
-            ln -s ~/dotfiles/btop/btop.conf ~/.config/btop/btop.conf
+            make_dir ~/.config/btop
+            create_symbolic_link ~/.config/btop/btop.conf ~/dotfiles/btop/btop.conf btop
         else
             echo_verbose "Skipping btop symlink configuration"
         fi
         if $kde_param ; then
            echo_verbose "Creating kde symlinks"
-           echo_verbose "Creating kdeglobals symlink from ~/.config/kdeglobals to ~/dotfiles/kde/kdeglobals"
-	   ln -s ~/dotfiles/kde/kdeglobals ~/.config/kdeglobals
-           echo_verbose "Creating kde shortcuts symlink from ~/.config/kglobalshortcutsrc to ~/dotfiles/kde/kglobalshortcutsrc"
-           ln -s ~/dotfiles/kde/kglobalshortcutsrc ~/.config/kglobalshortcutsrc
-           echo_verbose "Creating kde hotkeys symlink from ~/.config/khotkeysrc to ~/dotfiles/kde/khotkeysrc"
-           ln -s ~/dotfiles/kde/khotkeysrc ~/.config/khotkeysrc
-           echo_verbose "Creating kde look and feel (icons, wallpapers, extensions) symlink from ~/.local/plasma to ~/dotfiles/kde/plasma"
-           ln -s ~/dotfiles/kde/plasma ~/.local/plasma
+           create_symbolic_link ~/.config/kdeglobals ~/dotfiles/kde/kdeglobals kdeglobals
+           create_symbolic_link ~/.config/kglobalshortcutsrc ~/dotfiles/kde/kglobalshortcutsrc "kde shortcuts"
+           create_symbolic_link ~/.config/khotkeysrc ~/dotfiles/kde/khotkeysrc "kde hotkeys"
+           create_symbolic_link ~/.local/plasma ~/dotfiles/kde/plasma "kde look and feel (icons, wallpapers, extensions)"
         else
            echo_verbose "Skipping kde symlink configuration"
         fi
@@ -198,6 +211,13 @@ function install_packages() {
         echo_verbose "Some of the installation script may fail without some of the necessary packages"
         echo_verbose "See --apt-necessary option"
     else
+        echo_verbose "Setting up dpkg applications"
+        if $debug_mode ; then
+            dpkg --configure -a
+        else
+            dpkg --configure -a > /dev/null
+        fi
+
         echo_verbose "Updating apt repository"
         if $debug_mode ; then
             sudo apt-get update
@@ -216,14 +236,14 @@ function install_packages() {
     fi
 
     if $no_brew ; then
-        echo_verbose "Skipping installation of brew and brew packages"
+        echo_verbose "Skipping installation of brew application and brew packages"
     else
         install_brew
         install_brew_packages
     fi
 
     if $no_snap ; then
-        echo_verbose "Skipping installation of snap and snap packages"
+        echo_verbose "Skipping installation of snap application and snap packages"
     else
         install_snap
         install_snap_packages
@@ -344,6 +364,8 @@ else
     create_github_config
 
     if $zsh ; then
+        echo_verbose "Making zsh default shell"
+        chsh -s $(which zsh)
         echo "Enter source ~/.zshrc to configure zsh"
     fi
 fi
