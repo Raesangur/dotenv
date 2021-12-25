@@ -15,6 +15,7 @@ function show_usage() {
     printf "\t neofetch         Install neofetch config files\n"
     printf "\t btop             Install btop config files\n"
     printf "\t kde              Install kde config files\n"
+    printf "\t python           Setup python links in /bin\n"
     printf "\tExtra Options: \n"
     printf "\t --no-symlinks    Skip configuration of symbolic links\n"
     printf "\t --no-git-creds   Skip configuration of git credentials\n"
@@ -22,6 +23,7 @@ function show_usage() {
     printf "\t --no-apt         Skip installation of apt packages\n"
     printf "\t --no-brew        Skip installation of brew and brew packages\n"
     printf "\t --no-snap        Skip installation of snap and snap packages\n"
+    printf "\t --no-pip         Skip installation of pip packages\n"
     printf "\t --apt-necessary  Install only necessary apt packages\n"
     return 0;
 }
@@ -37,6 +39,7 @@ no_git_creds=false
 no_apt=false
 no_brew=false
 no_snap=false
+no_pip=false
 apt_necessary=false
 
 # Parameters
@@ -46,6 +49,7 @@ git_param=false
 neofetch_param=false
 btop_param=false
 kde_param=false
+python_param=false
 
 function echo_verbose() {
     if $verbose_mode ; then
@@ -110,6 +114,21 @@ function create_symbolic_links() {
            create_symbolic_link ~/.local/plasma ~/dotfiles/kde/plasma "kde look and feel (icons, wallpapers, extensions)"
         else
            echo_verbose "Skipping kde symlink configuration"
+        fi
+        if $python_param ; then
+           echo_verbose "Creating python alternative link to python3 with python"
+           if test -f /bin/python ; then
+               echo_verbose "/bin/python already exists"
+           else
+               if test -f /bin/python3 ; then
+                   echo_verbose "Creating alternative link to /bin/python3"
+                   update-alternatives --install /bin/python python /bin/python3 10
+               else
+                   echo_verbose "/bin/python3 not found, alternative link not created"
+               fi
+           fi
+        else
+           echo_verbose "Skipping python3 link configuration"
         fi
     fi
 }
@@ -205,6 +224,15 @@ function install_snap_packages() {
     fi
 }
 
+function install_pip_packages() {
+    echo_verbose "Installing pip packages"
+    if $debug_mode ; then
+        xargs -a ~/dotfiles/packages/pip-packages sudo pip install -r
+    else
+        xargs -a ~/dotfiles/packages/pip-packages sudo pip install -r > /dev/null
+    fi
+}
+
 function install_packages() {
     if $no_apt ; then
         echo_verbose "Skipping apt-packages installation"
@@ -248,32 +276,36 @@ function install_packages() {
         install_snap
         install_snap_packages
     fi
+
+    if $no_pip ; then
+        echo_verbose "Skipping installation of pip packages"
+    else
+        install_pip_packages
+    fi
 }
 
 function display_parameters() {
-if $verbose_mode; 
-then
-
-printf "Verbose mode, options and parameters:\n"
-printf "\tHelp:        $display_help\n"
-printf "\tVerbose:     $verbose_mode\n"
-printf "\tDebug:       $debug_mode\n"
-printf "\t-----\n"
-printf "\tno-symlinks: $no_symlinks\n"
-printf "\tno-git-creds:$no_git_creds\n"
-printf "\tno-apt:      $no_apt\n"
-printf "\tno_brew:     $no_brew\n"
-printf "\tno_snap:     $no_snap\n"
-printf "\tapt_necess:  $apt_necessary\n"
-printf "\t-----\n"
-printf "\tzsh:         $zsh_param\n"
-printf "\tgit:         $git_param\n"
-printf "\tneofetch:    $neofetch_param\n"
-printf "\tbtop:        $btop_param\n"
-printf "\tkde:         $kde_param\n"
-fi
-
-return 0;
+    if $debug_mode ; then
+        printf "Verbose mode, options and parameters:\n"
+        printf "\tHelp:        $display_help\n"
+        printf "\tVerbose:     $verbose_mode\n"
+        printf "\tDebug:       $debug_mode\n"
+        printf "\t-----\n"
+        printf "\tno-symlinks: $no_symlinks\n"
+        printf "\tno-git-creds:$no_git_creds\n"
+        printf "\tno-apt:      $no_apt\n"
+        printf "\tno_brew:     $no_brew\n"
+        printf "\tno_snap:     $no_snap\n"
+        printf "\tno_pip:      $no_pip\n"
+        printf "\tapt_necess:  $apt_necessary\n"
+        printf "\t-----\n"
+        printf "\tzsh:         $zsh_param\n"
+        printf "\tgit:         $git_param\n"
+        printf "\tneofetch:    $neofetch_param\n"
+        printf "\tbtop:        $btop_param\n"
+        printf "\tkde:         $kde_param\n"
+        printf "\tpython:      $python_param\n"
+    fi
 }
 
 
@@ -317,29 +349,36 @@ fi
 if [[ "$@" == *"--no-snap"* ]] ; then
     no_snap=true
 fi
+if [[ "$@" == *"--no-pip"* ]] ; then
+    no_pip=true
+fi
 if [[ "$@" == *"--apt-necessary"* ]] ; then
     apt_necessary=true
 fi
 
 # Parameters
-if [[ "$@" == *"zsh"* ]] ; then
+if [[ "$@" == *" zsh "* ]] ; then
     zsh_param=true
     all_param=false
 fi
-if [[ "$@" == *"git"* ]] ; then
+if [[ "$@" == *" git "* ]] ; then
     git_param=true
     all_param=false
 fi
-if [[ "$@" == *"neofetch"* ]] ; then
+if [[ "$@" == *" neofetch "* ]] ; then
     neofetch_param=true
     all_param=false
 fi
-if [[ "$@" == *"btop"* ]] ; then
+if [[ "$@" == *" btop "* ]] ; then
     btop_param=true
     all_param=false
 fi
-if [[ "$@" == *"kde"* ]] ; then
+if [[ "$@" == *" kde "* ]] ; then
     kde_param=true
+    all_param=false
+fi
+if [[ "$@" == *" python "* ]] ; then
+    python_param=true
     all_param=false
 fi
 
@@ -350,6 +389,7 @@ if $all_param ; then
     neofetch_param=true
     btop_param=true
     kde_param=true
+    python_param=true
 fi
 
 
