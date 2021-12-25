@@ -23,6 +23,7 @@ openssl
 openvpn
 tcpdump
 tor
+update-notifier-common
 vim
 vlc
 wine
