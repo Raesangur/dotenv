@@ -93,6 +93,8 @@ function create_symbolic_links() {
            ln -s ~/dotfiles/kde/kglobalshortcutsrc ~/.config/kglobalshortcutsrc
            echo_verbose "Creating kde hotkeys symlink from ~/.config/khotkeysrc to ~/dotfiles/kde/khotkeysrc"
            ln -s ~/dotfiles/kde/khotkeysrc ~/.config/khotkeysrc
+           echo_verbose "Creating kde look and feel (icons, wallpapers, extensions) symlink from ~/.local/plasma to ~/dotfiles/kde/plasma"
+           ln -s ~/dotfiles/kde/plasma ~/.local/plasma
         else
            echo_verbose "Skipping kde symlink configuration"
         fi
