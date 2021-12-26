@@ -388,22 +388,22 @@ if [[ "$@" == *"--apt-necessary"* ]] ; then
 fi
 
 # Parameters
-if [[ "$@" == *" zsh "* ]] ; then
+if [[ "$@" == *" zsh"* ]] ; then
     zsh_param=true
 fi
-if [[ "$@" == *" git "* ]] ; then
+if [[ "$@" == *" git"* ]] ; then
     git_param=true
 fi
-if [[ "$@" == *" neofetch "* ]] ; then
+if [[ "$@" == *" neofetch"* ]] ; then
     neofetch_param=true
 fi
-if [[ "$@" == *" btop "* ]] ; then
+if [[ "$@" == *" btop"* ]] ; then
     btop_param=true
 fi
-if [[ "$@" == *" kde "* ]] ; then
+if [[ "$@" == *" kde"* ]] ; then
     kde_param=true
 fi
-if [[ "$@" == *" python "* ]] ; then
+if [[ "$@" == *" python"* ]] ; then
     python_param=true
 fi
 
