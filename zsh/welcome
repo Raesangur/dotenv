@@ -2,7 +2,7 @@ print -P    "%B@@@@@@@@@@@@@@             %F{red}&&&&&&&&&&&&&%f%    raesangur -
 print -P    "@@@@@@@@@@@@@@@@         %F{red}&&&&&&&&&&&&&&&%f   "
 print -P -n "@@@@@@@@@@@@@@@@@       %F{red}&&&&&&&&&&&&&&&&%f   ";  neofetch distro
 print -P -n "@@@@@@@@@@@@@@@@@@@    %F{red}&&&&&&&&&&&&&&&&&%f   ";  neofetch kernel
-print -P -n "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%F{red}&&&&&&&&&&%f   ";  neofetch de
+print -P -n "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%F{red}&&&&&&&&&&%f   ";  if neofetch de | grep -q 'de' ; then neofetch de ; else echo "" ; fi
 print -P    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%F{red}&&&&&&&&&&%f   "
 print -P -n "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%F{red}&&&&&&&&&&%f   ";  neofetch uptime
 print -P -n "@@@@@@@@@@@@ @@@@@@@@@@@@@@@  %F{red}&&&&&&&&&&%f   ";  neofetch shell

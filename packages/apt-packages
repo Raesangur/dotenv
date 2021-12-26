@@ -20,6 +20,8 @@ nano
 netcat
 nmap
 openjdk-11-jre
+openssh-client
+openssh-server
 openssl
 openvpn
 plasma-wallpaper-dynamic
