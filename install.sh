@@ -9,7 +9,7 @@ function show_usage() {
     printf "\t -h | --help      Display this menu\n"
     printf "\n"
     printf "\tParameters: \n"
-    printf "\tIf no parameters are specified, all tools are setup\n"
+    printf "\tIf no parameters are specified, none of these tools are setup\n"
     printf "\t zsh              Install zsh config files\n"
     printf "\t git              Install git config files and setup credientials on system\n"
     printf "\t neofetch         Install neofetch config files\n"
@@ -17,13 +17,14 @@ function show_usage() {
     printf "\t kde              Install kde config files\n"
     printf "\t python           Setup python links in /bin\n"
     printf "\tExtra Options: \n"
-    printf "\t --no-symlinks    Skip configuration of symbolic links\n"
-    printf "\t --no-git-creds   Skip configuration of git credentials\n"
-    printf "\t --no-packages    Skip installation of apt, brew and snap packages\n"
-    printf "\t --no-apt         Skip installation of apt packages\n"
-    printf "\t --no-brew        Skip installation of brew and brew packages\n"
-    printf "\t --no-snap        Skip installation of snap and snap packages\n"
-    printf "\t --no-pip         Skip installation of pip packages\n"
+    printf "\t --symlinks       Configuration of symbolic links\n"
+    printf "\t --git-creds      Configuration of git credentials\n"
+    printf "\t --packages       Installation of apt, brew, snap and pip packages, along with other software\n"
+    printf "\t --apt-packages   Installation of apt packages\n"
+    printf "\t --brew-packages  Installation of brew and brew packages\n"
+    printf "\t --snap-packages  Installation of snap and snap packages\n"
+    printf "\t --pip-packages   Installation of pip packages\n"
+    printf "\t --other-packages Installation of other packages and software\n"
     printf "\t --apt-necessary  Install only necessary apt packages\n"
     return 0;
 }
@@ -34,16 +35,16 @@ verbose_mode=false
 debug_mode=false
 
 # Extra Options
-no_symlinks=false
-no_git_creds=false
-no_apt=false
-no_brew=false
-no_snap=false
-no_pip=false
+no_symlinks=true
+no_git_creds=true
+no_apt=true
+no_brew=true
+no_snap=true
+no_pip=true
+no_other=true
 apt_necessary=false
 
 # Parameters
-all_param=true
 zsh_param=false
 git_param=false
 neofetch_param=false
@@ -88,30 +89,31 @@ function create_symbolic_links() {
         echo "Creating symbolic links..."
 
         if $zsh_param ; then
-            create_symbolic_link ~/.zshrc ~/dotfiles/zsh/.zshrc .zshrc
+            create_symbolic_link ~/.zshrc     ~/dotfiles/zsh/.zshrc     ".zshrc"
+            create_symbolic_link ~/.oh-my-zsh ~/dotfiles/zsh/.oh-my-zsh "oh-my-zsh"
         else
             echo_verbose "Skipping zsh symlinks configuration"
         fi
 
         if $neofetch_param ; then
             make_dir ~/.config/neofetch
-            create_symbolic_link ~/.config/neofetch/config.conf ~/dotfiles/neofetch/config.conf neofetch
+            create_symbolic_link ~/.config/neofetch/config.conf ~/dotfiles/neofetch/config.conf "neofetch"
         else
             echo_verbose "Skipping neofetch symlink configuration"
         fi
 
         if $btop_param ; then
             make_dir ~/.config/btop
-            create_symbolic_link ~/.config/btop/btop.conf ~/dotfiles/btop/btop.conf btop
+            create_symbolic_link ~/.config/btop/btop.conf ~/dotfiles/btop/btop.conf "btop"
         else
             echo_verbose "Skipping btop symlink configuration"
         fi
         if $kde_param ; then
            echo_verbose "Creating kde symlinks"
-           create_symbolic_link ~/.config/kdeglobals ~/dotfiles/kde/kdeglobals kdeglobals
+           create_symbolic_link ~/.config/kdeglobals         ~/dotfiles/kde/kdeglobals         "kdeglobals"
            create_symbolic_link ~/.config/kglobalshortcutsrc ~/dotfiles/kde/kglobalshortcutsrc "kde shortcuts"
-           create_symbolic_link ~/.config/khotkeysrc ~/dotfiles/kde/khotkeysrc "kde hotkeys"
-           create_symbolic_link ~/.local/plasma ~/dotfiles/kde/plasma "kde look and feel (icons, wallpapers, extensions)"
+           create_symbolic_link ~/.config/khotkeysrc         ~/dotfiles/kde/khotkeysrc         "kde hotkeys"
+           create_symbolic_link ~/.local/plasma              ~/dotfiles/kde/plasma             "kde look and feel (icons, wallpapers, extensions)"
         else
            echo_verbose "Skipping kde symlink configuration"
         fi
@@ -170,7 +172,7 @@ function install_necessary_apt_packages() {
 }
 
 function install_apt_packages() {
-    echo_verbose "Installing apt packages"
+    echo_verbose "Installing apt packages..."
     if $debug_mode ; then
         xargs -a ~/dotfiles/packages/apt-packages sudo apt-get install -y
     else
@@ -180,7 +182,7 @@ function install_apt_packages() {
 
 function install_brew() {
     if ! command -v brew &> /dev/null ; then
-        echo_verbose "Brew not found, installing brew"
+        echo_verbose "Brew not found, installing brew..."
         if $debug_mode ; then
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         else
@@ -192,7 +194,7 @@ function install_brew() {
 }
 
 function install_brew_packages() {
-    echo_verbose "Installing brew packages"
+    echo_verbose "Installing brew packages..."
     if $debug_mode ; then
         xargs -a ~/dotfiles/packages/brew-packages sudo brew install
     else
@@ -202,7 +204,7 @@ function install_brew_packages() {
 
 function install_snap() {
     if ! command -v snap &> /dev/null ; then
-        echo_verbose "Snap not found, installing snap"
+        echo_verbose "Snap not found, installing snap..."
         sudo snap set system experimental.parallel-instances=true
         if $debug_mode ; then
             sudo apt-get install snapd -y
@@ -215,7 +217,7 @@ function install_snap() {
 }
 
 function install_snap_packages() {
-    echo_verbose "Installing snap packages"
+    echo_verbose "Installing snap packages..."
     sudo snap set system experimental.parallel-instances=true
     if $debug_mode ; then
         xargs -a ~/dotfiles/packages/snap-packages sudo snap install
@@ -225,12 +227,17 @@ function install_snap_packages() {
 }
 
 function install_pip_packages() {
-    echo_verbose "Installing pip packages"
+    echo_verbose "Installing pip packages..."
     if $debug_mode ; then
         xargs -a ~/dotfiles/packages/pip-packages sudo pip install -r
     else
         xargs -a ~/dotfiles/packages/pip-packages sudo pip install -r > /dev/null
     fi
+}
+
+function install_other_packages() {
+    echo_verbose "Installing other packages..."
+    echo_verbose "No other packages were configured to be installed"
 }
 
 function install_packages() {
@@ -239,14 +246,14 @@ function install_packages() {
         echo_verbose "Some of the installation script may fail without some of the necessary packages"
         echo_verbose "See --apt-necessary option"
     else
-        echo_verbose "Setting up dpkg applications"
+        echo_verbose "Setting up dpkg applications..."
         if $debug_mode ; then
             dpkg --configure -a
         else
             dpkg --configure -a > /dev/null
         fi
 
-        echo_verbose "Updating apt repository"
+        echo_verbose "Updating apt repository..."
         if $debug_mode ; then
             sudo apt-get update
             sudo apt-get upgrade -y
@@ -282,6 +289,12 @@ function install_packages() {
     else
         install_pip_packages
     fi
+
+    if $no_other ; then
+	echo_verbose "Skipping installation of other packages"
+    else
+	install_other_packages
+    fi
 }
 
 function setup_kde() {
@@ -304,7 +317,7 @@ function display_parameters() {
         printf "\tVerbose:     $verbose_mode\n"
         printf "\tDebug:       $debug_mode\n"
         printf "\t-----\n"
-        printf "\tno-symlinks: $no_symlinks\n"
+        printf "\tno-symlinks:    $no_symlinks\n"
         printf "\tno-git-creds:$no_git_creds\n"
         printf "\tno-apt:      $no_apt\n"
         printf "\tno_brew:     $no_brew\n"
@@ -342,29 +355,33 @@ if [[ "$@" == *"--help"* ]] || [[ "$@" == *"-h"* ]] ; then
     display_help=true
 fi
 
-if [[ "$@" == *"--no-symlinks"* ]] ; then
-    no_symlinks=true
+if [[ "$@" == *"--symlinks"* ]] ; then
+    no_symlinks=false
 fi
-if [[ "$@" == *"--no-git-creds"* ]] ; then
-    no_git_creds=true
+if [[ "$@" == *"--git-creds"* ]] ; then
+    no_git_creds=false
 fi
-if [[ "$@" == *"--no-packages"* ]] ; then
-    no_apt=true
-    no_brew=true
-    no_snap=true
-    no_pip=true
+if [[ "$@" == *"--packages"* ]] ; then
+    no_apt=false
+    no_brew=false
+    no_snap=false
+    no_pip=false
+    no_other=false
 fi
-if [[ "$@" == *"--no-apt"* ]] ; then
-    no_apt=true
+if [[ "$@" == *"--apt-packages"* ]] ; then
+    no_apt=false
 fi
-if [[ "$@" == *"--no-brew"* ]] ; then
-    no_brew=true
+if [[ "$@" == *"--brew-packages"* ]] ; then
+    no_brew=false
 fi
-if [[ "$@" == *"--no-snap"* ]] ; then
-    no_snap=true
+if [[ "$@" == *"--snap-packages"* ]] ; then
+    no_snap=false
 fi
-if [[ "$@" == *"--no-pip"* ]] ; then
-    no_pip=true
+if [[ "$@" == *"--pip-packages"* ]] ; then
+    no_pip=false
+fi
+if [[ "$@" == *"--other-packages"* ]] ; then
+    no_other=false
 fi
 if [[ "$@" == *"--apt-necessary"* ]] ; then
     apt_necessary=true
@@ -373,36 +390,20 @@ fi
 # Parameters
 if [[ "$@" == *" zsh "* ]] ; then
     zsh_param=true
-    all_param=false
 fi
 if [[ "$@" == *" git "* ]] ; then
     git_param=true
-    all_param=false
 fi
 if [[ "$@" == *" neofetch "* ]] ; then
     neofetch_param=true
-    all_param=false
 fi
 if [[ "$@" == *" btop "* ]] ; then
     btop_param=true
-    all_param=false
 fi
 if [[ "$@" == *" kde "* ]] ; then
     kde_param=true
-    all_param=false
 fi
 if [[ "$@" == *" python "* ]] ; then
-    python_param=true
-    all_param=false
-fi
-
-
-if $all_param ; then
-    zsh_param=true
-    git_param=true
-    neofetch_param=true
-    btop_param=true
-    kde_param=true
     python_param=true
 fi
 
