@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/pascal/.oh-my-zsh"
+export ZSH=~/.oh-my-zsh
 
 # zsh theme
 #ZSH_THEME="nanotech"
