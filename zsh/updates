@@ -1,8 +1,5 @@
-printf "apt updates:"
 /etc/update-motd.d/90-updates-available
-
 snap refresh --list 
-
 if command -v brew &> /dev/null ; then
     brew_updates=$(brew outdated)
     if [[ ! ${brew_updates// } ]] ; then 
