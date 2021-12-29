@@ -38,6 +38,8 @@ source $ZSH/oh-my-zsh.sh
 
 
 # User configuration
+PATH=${PATH}:~/.local/bin
+export PATH
 
 # Set Software Aliases
 source ~/dotfiles/zsh/alias
@@ -60,5 +62,4 @@ pathadd() {
 # Display welcome message on shell startup
 #~/scripts/welcome.sh
 source ~/dotfiles/zsh/welcome
-
-/etc/update-motd.d/90-updates-available
+source ~/dotfiles/zsh/updates
