@@ -1,4 +1,7 @@
-print -P    "%B@@@@@@@@@@@@@@             %F{red}&&&&&&&&&&&&&%f%    raesangur -- petit pascal"
+bold=$(tput bold)
+normal=$(tput sgr0)
+
+echo "${bold}@@@@@@@@@@@@@@             %F{red}&&&&&&&&&&&&&%f%    raesangur -- petit pascal${normal}"
 print -P    "@@@@@@@@@@@@@@@@         %F{red}&&&&&&&&&&&&&&&%f   "
 print -P -n "@@@@@@@@@@@@@@@@@       %F{red}&&&&&&&&&&&&&&&&%f   ";  neofetch distro
 print -P -n "@@@@@@@@@@@@@@@@@@@    %F{red}&&&&&&&&&&&&&&&&&%f   ";  neofetch kernel
