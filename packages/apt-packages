@@ -13,12 +13,16 @@ gimp
 hashcat
 hexedit
 htop
+isomaster
 java-common
 john
 lm-sensors
 lolcat
+meson
+mkisofs
 nano
 netcat
+ninja
 nmap
 openjdk-11-jre
 openssh-client
@@ -28,6 +32,7 @@ openvpn
 plasma-wallpaper-dynamic
 python3
 python3-pip
+syslinux
 tcpdump
 tor
 update-notifier-common

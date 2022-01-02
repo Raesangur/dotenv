@@ -9,6 +9,7 @@ alias my_ip="neofetch public_ip; neofetch local_ip"
 alias restart="sudo reboot"
 alias fucking=sudo
 alias please=sudo
+alias show=tycat
 
 alias git_gud="~/dotfiles/git/git_gud.sh"
 
