@@ -7,6 +7,10 @@ clear
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 
+# Deal with locale
+LC_CTYPE=en_US.UTF-8
+LC_ALL=en_US.UTF-8
+
 # zsh theme
 #ZSH_THEME="nanotech"
 source ~/dotfiles/zsh/prompt
