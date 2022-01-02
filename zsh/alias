@@ -1,6 +1,10 @@
 # Setup software
-eval $(thefuck --alias)
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+if command -v thefuck &> /dev/null ; then
+    eval $(thefuck --alias)
+fi
+if command -v brew &> /dev/null ; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
 alias bat=batcat
 
 # Setup utilities
@@ -11,8 +15,6 @@ alias fucking=sudo
 alias please=sudo
 alias show=tycat
 
-alias git_gud="~/dotfiles/git/git_gud.sh"
-
 # Setup small programs
 alias bon_matin="source ~/.zshrc"
-
+alias git_gud="~/dotfiles/git/git_gud.sh"

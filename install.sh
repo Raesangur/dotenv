@@ -90,7 +90,7 @@ function create_symbolic_links() {
 
         if $zsh_param ; then
             create_symbolic_link ~/.zshrc     ~/dotfiles/zsh/.zshrc     ".zshrc"
-            create_symbolic_link ~/.oh-my-zsh ~/dotfiles/zsh/.oh-my-zsh "oh-my-zsh"
+            git clone https://www.github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
         else
             echo_verbose "Skipping zsh symlinks configuration"
         fi
