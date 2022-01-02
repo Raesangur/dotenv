@@ -1,22 +1,23 @@
 bold=$(tput bold)
 normal=$(tput sgr0)
+red='\033[0;31m'
+nc='\033[0m' # No Color
 
-echo "${bold}@@@@@@@@@@@@@@             %F{red}&&&&&&&&&&&&&%f%    raesangur -- petit pascal${normal}"
-print -P    "@@@@@@@@@@@@@@@@         %F{red}&&&&&&&&&&&&&&&%f   "
-print -P -n "@@@@@@@@@@@@@@@@@       %F{red}&&&&&&&&&&&&&&&&%f   ";  neofetch distro
-print -P -n "@@@@@@@@@@@@@@@@@@@    %F{red}&&&&&&&&&&&&&&&&&%f   ";  neofetch kernel
-print -P -n "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%F{red}&&&&&&&&&&%f   ";  if neofetch de | grep -q 'de' ; then neofetch de ; else echo "" ; fi
-print -P    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%F{red}&&&&&&&&&&%f   "
-print -P -n "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%F{red}&&&&&&&&&&%f   ";  neofetch uptime
-print -P -n "@@@@@@@@@@@@ @@@@@@@@@@@@@@@  %F{red}&&&&&&&&&&%f   ";  neofetch shell
-print -P -n "@@@@@@@@@@@@   @@@@@@@@@@@    %F{red}&&&&&&&&&&%f   ";  neofetch term
-print -P    "@@@@@@@@@@@@      @@@@@       %F{red}&&&&&&&&&&%f   ";
-print -P -n "@@@@@@@@@@@@                  %F{red}&&&&&&&&&&%f   ";  neofetch cpu --cpu_cores off --cpu_speed off
-print -P -n "@@@@@@@@@@@@                  %F{red}&&&&&&&&&&%f   ";  neofetch memory
-print -P -n "@@@@@@@@@@@@                  %F{red}&&&&&&&&&&%f   ";  if neofetch battery | grep -q 'battery' ; then neofetch battery ; else ; echo "" ; fi
-print -P    "@@@@@@@@@@@@                  %F{red}&&&&&&&&&&%f   "
-print -P -n "@@@@@@@@@@@@                  %F{red}&&&&&&&&&&%f   ";  neofetch local_ip
-print -P -n "@@@@@@@@@@@@                  %F{red}&&&&&&&&&&%f   ";  neofetch public_ip
-print -P "%b"
+echo    "${bold}@@@@@@@@@@@@@@             ${red}&&&&&&&&&&&&&${nc}   ${bold}raesangur -- petit pascal${normal}"
+echo    "${bold}@@@@@@@@@@@@@@@@         ${red}&&&&&&&&&&&&&&&${nc}${normal}   "
+echo -n "${bold}@@@@@@@@@@@@@@@@@       ${red}&&&&&&&&&&&&&&&&${nc}${normal}   ";  neofetch distro
+echo -n "${bold}@@@@@@@@@@@@@@@@@@@    ${red}&&&&&&&&&&&&&&&&&${nc}${normal}   ";  neofetch kernel
+echo -n "${bold}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${red}&&&&&&&&&&${nc}${normal}   ";  if neofetch de | grep -q 'de' ; then neofetch de ; else echo "" ; fi
+echo    "${bold}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${red}&&&&&&&&&&${nc}${normal}   "
+echo -n "${bold}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${red}&&&&&&&&&&${nc}${normal}   ";  neofetch uptime
+echo -n "${bold}@@@@@@@@@@@@ @@@@@@@@@@@@@@@  ${red}&&&&&&&&&&${nc}${normal}   ";  neofetch shell
+echo -n "${bold}@@@@@@@@@@@@   @@@@@@@@@@@    ${red}&&&&&&&&&&${nc}${normal}   ";  neofetch term
+echo    "${bold}@@@@@@@@@@@@      @@@@@       ${red}&&&&&&&&&&${nc}${normal}   ";
+echo -n "${bold}@@@@@@@@@@@@                  ${red}&&&&&&&&&&${nc}${normal}   ";  neofetch cpu --cpu_cores off --cpu_speed off
+echo -n "${bold}@@@@@@@@@@@@                  ${red}&&&&&&&&&&${nc}${normal}   ";  neofetch memory
+echo -n "${bold}@@@@@@@@@@@@                  ${red}&&&&&&&&&&${nc}${normal}   ";  if neofetch battery | grep -q 'battery' ; then neofetch battery ; else ; echo "" ; fi
+echo    "${bold}@@@@@@@@@@@@                  ${red}&&&&&&&&&&${nc}${normal}   "
+echo -n "${bold}@@@@@@@@@@@@                  ${red}&&&&&&&&&&${nc}${normal}   ";  neofetch local_ip
+echo -n "${bold}@@@@@@@@@@@@                  ${red}&&&&&&&&&&${nc}${normal}   ";  neofetch public_ip
 
 figlet -t -d ~/dotfiles/zsh/fonts/ -f Big-Money-sw.flf "Bon matin" | lolcat
