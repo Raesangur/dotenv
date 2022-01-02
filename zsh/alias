@@ -8,7 +8,6 @@ fi
 alias bat=batcat
 
 # Setup utilities
-alias update="sudo apt-get update; sudo apt-get upgrade -y; sudo apt-get dist-upgrade -y; sudo apt-get autoremove; sudo apt-get autoclean; sudo snap refresh; brew upgrade; npm update"
 alias my_ip="neofetch public_ip; neofetch local_ip"
 alias restart="sudo reboot"
 alias fucking=sudo
@@ -18,3 +17,4 @@ alias show=tycat
 # Setup small programs
 alias bon_matin="source ~/.zshrc"
 alias git_gud="~/dotfiles/git/git_gud.sh"
+alias update="~/dotfiles/zsh/run_updates.sh"
