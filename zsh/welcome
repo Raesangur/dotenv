@@ -11,7 +11,7 @@ echo -e -n "${bold}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${red}&&&&&&&&&&${nc}${normal} 
 echo -e    "${bold}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${red}&&&&&&&&&&${nc}${normal}   "
 echo -e -n "${bold}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${red}&&&&&&&&&&${nc}${normal}   ";  neofetch uptime
 echo -e -n "${bold}@@@@@@@@@@@@ @@@@@@@@@@@@@@@  ${red}&&&&&&&&&&${nc}${normal}   ";  neofetch shell
-echo -e -n "${bold}@@@@@@@@@@@@   @@@@@@@@@@@    ${red}&&&&&&&&&&${nc}${normal}   ";  neofetch term
+echo -e -n "${bold}@@@@@@@@@@@@   @@@@@@@@@@@    ${red}&&&&&&&&&&${nc}${normal}   ";  if neofetch term | grep -q 'term' ; then neofetch term ; else echo "" ; fi
 echo -e    "${bold}@@@@@@@@@@@@      @@@@@       ${red}&&&&&&&&&&${nc}${normal}   ";
 echo -e -n "${bold}@@@@@@@@@@@@                  ${red}&&&&&&&&&&${nc}${normal}   ";  neofetch cpu --cpu_cores off --cpu_speed off
 echo -e -n "${bold}@@@@@@@@@@@@                  ${red}&&&&&&&&&&${nc}${normal}   ";  neofetch memory
