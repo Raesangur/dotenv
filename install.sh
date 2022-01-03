@@ -26,6 +26,7 @@ function show_usage() {
     printf "\t --pip-packages   Installation of pip packages\n"
     printf "\t --other-packages Installation of other packages and software\n"
     printf "\t --apt-necessary  Install only necessary apt packages\n"
+    printf "\t --apt-extra      Install some extra apt packages\n"
     return 0;
 }
 
@@ -43,6 +44,7 @@ no_snap=true
 no_pip=true
 no_other=true
 apt_necessary=false
+apt_extra=false
 
 # Parameters
 zsh_param=false
@@ -180,6 +182,15 @@ function install_apt_packages() {
     fi
 }
 
+function install_extra_apt_packages() {
+    echo_verbose "Installing extra apt-packages"
+    if $debug_mode ; then
+        xargs -a ~/dotfiles/packages/apt-packages-extra sudo apt-get install -y
+    else
+        xargs -a ~/dotfiles/packages/apt-packages-extra sudo apt-get install -y > /dev/null
+    fi
+}
+
 function install_brew() {
     if ! command -v brew &> /dev/null ; then
         echo_verbose "Brew not found, installing brew..."
@@ -267,6 +278,11 @@ function install_packages() {
             echo_verbose "Skipping installation of non-necessary apt-packages"
         else
             install_apt_packages
+        fi
+        if $apt_extra ; then
+            install_extra_apt_packages
+        else
+            echo_verbose "Skipping installation of extra apt-packages"
         fi
     fi
 
@@ -385,6 +401,15 @@ if [[ "$@" == *"--other-packages"* ]] ; then
 fi
 if [[ "$@" == *"--apt-necessary"* ]] ; then
     apt_necessary=true
+    no_apt=false
+fi
+if [[ "$@" == *"--apt-extra"* ]] ; then
+    apt_extra=true
+    no_apt=false
+    if $apt_necessary ; then
+        echo "Conflict: option --apt-necessary and --apt-extra incompatible"
+        echo "Installing extra packages"
+    fi
 fi
 
 # Parameters
