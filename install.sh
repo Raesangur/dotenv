@@ -180,8 +180,9 @@ function create_github_config() {
             else
                 ~/dotfiles/git/git_clone.sh Raesangur/dotfiles.git ~/dotfiles2 >/dev/null
             fi
+            chmod +x ~/dotfiles2/install.sh
 
-            eval "; echo restarting ; sleep 3; rm -rf ~/dotfiles ; mv ~/dotfiles2 ~/dotfiles ; cd ~/dotfiles ; chmod +x install.sh ; ./install.sh ${@} --secret_git_param_" &
+            eval "echo restarting ; sleep 3; rm -rf ~/dotfiles ; mv ~/dotfiles2 ~/dotfiles ; ~/dotfiles/install.sh ${@} --secret_git_param_" &
             echo_verbose "restarting installation script"
             exit 0
         fi
