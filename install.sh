@@ -143,26 +143,30 @@ function create_github_config() {
     if $no_git_creds ; then
         echo_verbose "Skipping github credientials configuration"
     else
-        echo "Configuring github credientials"
-        echo "Set github credentials email address & username"
-        read git_creds_email -p "Email"
-        read git_creds_user -p "Username"
-        echo_verbose "Creating SSH key"
-	ssh-keygen -t ed25519 -C $git_creds_email
+        if test -f ~/.ssh/id_ed25519 ; then
+            echo "Git credentials seem to be already setup (file ~/.ssh/id_ed25519 exists)"
+        else
+            echo "Configuring github credientials"
+            echo "Set github credentials email address & username"
+            read git_creds_email -p "Email"
+            read git_creds_user -p "Username"
+            echo_verbose "Creating SSH key"
+	    ssh-keygen -t ed25519 -C $git_creds_email
 
-        echo_verbose "Starting SSH agent and adding newly generated SSH key"
-        eval "$(ssh-agent -s)"
-        ssh-add ~/.ssh/id_ed25519
+            echo_verbose "Starting SSH agent and adding newly generated SSH key"
+            eval "$(ssh-agent -s)"
+            ssh-add ~/.ssh/id_ed25519
 
-        echo "Copy the following line and press ENTER to open Github Settings in a browser"
-        cat ~/.ssh/id_ed25519.pub
-        read -p "Press ENTER to continue to https://www.github.com/settings/ssh/new"
-        echo_verbose "Opening github settings page in default browser"
-        xdg-open "https://www.github.com/settings/ssh/new"	# xdg-open opens the default browser
+            echo "Copy the following line and press ENTER to open Github Settings in a browser"
+            cat ~/.ssh/id_ed25519.pub
+            read -p "Press ENTER to continue to https://www.github.com/settings/ssh/new"
+            echo_verbose "Opening github settings page in default browser"
+            xdg-open "https://www.github.com/settings/ssh/new"	# xdg-open opens the default browser
 
-        echo_verbose "Setting up git email and username in ~/.gitconfig"
-        git config --global user.email $git_creds_email
-        git config --global user.name $git_creds_user
+            echo_verbose "Setting up git email and username in ~/.gitconfig"
+            git config --global user.email $git_creds_email
+            git config --global user.name $git_creds_user
+        fi
     fi
 
     if $git_param ; then
@@ -171,7 +175,12 @@ function create_github_config() {
         else
             echo_verbose "github dotfile repo is not properly configured with ssh, downloading the repo properly"
 
-            ~/dotfiles/git_clone.sh Raesangur/dotfiles ~/dotfiles2
+            if $debug_mode ; then
+                ~/dotfiles/git_clone.sh Raesangur/dotfiles ~/dotfiles2
+            else
+                ~/dotfiles/git_clone.sh Raesangur/dotfiles ~/dotfiles2 >/dev/null
+            fi
+
             echo "sleep 3; rm -rf ~/dotfiles ; mv ~/dotfiles2 ~/dotfiles ; cd ~/dotfiles ; chmod +x install.sh ; ./install.sh ${@} --secret_git_param_" &
             echo_verbose "restarting installation script"
             exit 0
