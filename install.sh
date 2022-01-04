@@ -46,6 +46,8 @@ no_other=true
 apt_necessary=false
 apt_extra=false
 
+secret_git_param=false
+
 # Parameters
 zsh_param=false
 git_param=false
@@ -161,6 +163,22 @@ function create_github_config() {
         echo_verbose "Setting up git email and username in ~/.gitconfig"
         git config --global user.email $git_creds_email
         git config --global user.name $git_creds_user
+    fi
+
+    if $git_param ; then
+        if [[ `cat ~/dotfiles/.git/config | grep url | head -n 1` =~ .*[[:space:]][A-Za-z0-9_\-]+@[A-Za-z0-9_\-]+.[A-Za-z0-9_\-]+:[A-Za-z0-9_\-]+\/[A-Za-z0-9_\-]+ ]] ; then
+            echo_verbose "github dotfile repo is properly configured with ssh"
+        else
+            echo_verbose "github dotfile repo is not properly configured with ssh, downloading the repo properly"
+
+            ~/dotfiles/git_clone.sh Raesangur/dotfiles ~/dotfiles2
+            echo "sleep 3; rm -rf ~/dotfiles ; mv ~/dotfiles2 ~/dotfiles ; cd ~/dotfiles ; chmod +x install.sh ; ./install.sh ${@} --secret_git_param_" &
+            echo_verbose "restarting installation script"
+            exit 0
+        fi
+    else
+        echo_verbose "Skipping github dotfile repo configuration"
+        echo_verbose "Some symbolic links might not work without this step"
     fi
 }
 
@@ -347,6 +365,7 @@ function display_parameters() {
         printf "\tbtop:        $btop_param\n"
         printf "\tkde:         $kde_param\n"
         printf "\tpython:      $python_param\n"
+        printf "\tsecret:      $secret_git_param\n"
     fi
 }
 
@@ -431,7 +450,9 @@ fi
 if [[ "$@" == *" python"* ]] ; then
     python_param=true
 fi
-
+if [[ "$@" == *"--secret_git_param_"* ]] ; then
+    secret_git_param=true
+fi
 
 # Call help function or start installation
 if $display_help ; then
@@ -439,9 +460,12 @@ if $display_help ; then
 else
     display_parameters
 
-    install_packages
+    if ! $secret_git_param ; then
+        install_packages
+        create_github_config
+    fi
+
     create_symbolic_links
-    create_github_config
     setup_kde
 
     if $zsh_param ; then
