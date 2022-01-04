@@ -180,9 +180,8 @@ function create_github_config() {
             else
                 ~/dotfiles/git/git_clone.sh Raesangur/dotfiles.git ~/dotfiles2 >/dev/null
             fi
-            chmod +x ~/dotfiles2/install.sh
 
-            eval "echo restarting ; sleep 3; rm -rf ~/dotfiles ; mv ~/dotfiles2 ~/dotfiles ; ~/dotfiles/install.sh ${@} --secret_git_param_" &
+            eval "cd ; sleep 2; rm -rf ~/dotfiles ; mv ~/dotfiles2 ~/dotfiles ; chmod +x ~/dotfiles/install.sh ; eval ~/dotfiles/install.sh ${@} --secret_git_param_" & disown
             echo_verbose "restarting installation script"
             exit 0
         fi
@@ -472,7 +471,9 @@ else
 
     if ! $secret_git_param ; then
         install_packages
-        create_github_config
+        create_github_config $@
+    else
+        echo "param received"
     fi
 
     create_symbolic_links
@@ -483,4 +484,5 @@ else
         chsh -s $(which zsh)
         echo "Enter source ~/.zshrc to configure zsh"
     fi
+    echo "    "
 fi
