@@ -176,12 +176,12 @@ function create_github_config() {
             echo_verbose "github dotfile repo is not properly configured with ssh, downloading the repo properly"
 
             if $debug_mode ; then
-                ~/dotfiles/git_clone.sh Raesangur/dotfiles ~/dotfiles2
+                ~/dotfiles/git/git_clone.sh Raesangur/dotfiles.git ~/dotfiles2
             else
-                ~/dotfiles/git_clone.sh Raesangur/dotfiles ~/dotfiles2 >/dev/null
+                ~/dotfiles/git/git_clone.sh Raesangur/dotfiles.git ~/dotfiles2 >/dev/null
             fi
 
-            echo "sleep 3; rm -rf ~/dotfiles ; mv ~/dotfiles2 ~/dotfiles ; cd ~/dotfiles ; chmod +x install.sh ; ./install.sh ${@} --secret_git_param_" &
+            eval "; echo restarting ; sleep 3; rm -rf ~/dotfiles ; mv ~/dotfiles2 ~/dotfiles ; cd ~/dotfiles ; chmod +x install.sh ; ./install.sh ${@} --secret_git_param_" &
             echo_verbose "restarting installation script"
             exit 0
         fi
