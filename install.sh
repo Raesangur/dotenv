@@ -17,7 +17,7 @@ function show_usage() {
     printf "\t kde              Install kde config files\n"
     printf "\t python           Setup python links in /bin\n"
     printf "\tExtra Options: \n"
-    printf "\t --symlinks       Configuration of symbolic links\n"
+    printf "\t --links          Configuration of links (symbolic links, subrepositories etc.)\n"
     printf "\t --git-creds      Configuration of git credentials\n"
     printf "\t --packages       Installation of apt, brew, snap and pip packages, along with other software\n"
     printf "\t --apt-packages   Installation of apt packages\n"
@@ -77,6 +77,14 @@ function make_dir() {
     fi
 }
 
+function create_subrepo() {
+    if [ ! -d "$1" ] || [ ! -d "$1/.git" ] ; then
+        echo_verbose "subrepository is not yet configured, downloading"
+        # I know I could use submodules but they don't work exactly like I intend to use them
+        git submodule update --init "$1"
+    fi
+}
+
 function create_symbolic_link() {
     echo_verbose "Creating $3 symlink from $1 to $2"
     if test -f "$1" ; then
@@ -93,8 +101,9 @@ function create_symbolic_links() {
         echo "Creating symbolic links..."
 
         if $zsh_param ; then
-            create_symbolic_link ~/.zshrc     ~/dotfiles/zsh/.zshrc     ".zshrc"
-            git clone https://www.github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+             create_subrepo zsh
+#            create_symbolic_link ~/.zshrc     ~/dotfiles/zsh/.zshrc     ".zshrc"
+#            git clone https://www.github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
         else
             echo_verbose "Skipping zsh symlinks configuration"
         fi
