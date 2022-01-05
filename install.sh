@@ -80,8 +80,7 @@ function make_dir() {
 function create_subrepo() {
     if [ ! -d "$1" ] || [ ! -d "$1/.git" ] ; then
         echo_verbose "subrepository is not yet configured, downloading"
-        # I know I could use submodules but they don't work exactly like I intend to use them
-        git submodule update --init "$1"
+        git submodule update --init --recursive "$1"
     fi
 }
 
@@ -101,9 +100,9 @@ function create_symbolic_links() {
         echo "Creating symbolic links..."
 
         if $zsh_param ; then
-             create_subrepo zsh
-#            create_symbolic_link ~/.zshrc     ~/dotfiles/zsh/.zshrc     ".zshrc"
-#            git clone https://www.github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+            create_subrepo zsh
+            create_symbolic_link ~/.zshrc     ~/dotfiles/zsh/.zshrc     ".zshrc"
+            git clone https://www.github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
         else
             echo_verbose "Skipping zsh symlinks configuration"
         fi
