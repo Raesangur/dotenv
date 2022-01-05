@@ -15,6 +15,7 @@ function show_usage() {
     printf "\t neofetch         Install neofetch config files\n"
     printf "\t btop             Install btop config files\n"
     printf "\t kde              Install kde config files\n"
+    printf "\t terminology      Install terminology config files\n"
     printf "\t python           Setup python links in /bin\n"
     printf "\tExtra Options: \n"
     printf "\t --links          Configuration of links (symbolic links, subrepositories etc.)\n"
@@ -36,7 +37,7 @@ verbose_mode=false
 debug_mode=false
 
 # Extra Options
-no_symlinks=true
+no_links=true
 no_git_creds=true
 no_apt=true
 no_brew=true
@@ -54,6 +55,7 @@ git_param=false
 neofetch_param=false
 btop_param=false
 kde_param=false
+terminology_param=false
 python_param=false
 
 function echo_verbose() {
@@ -93,35 +95,38 @@ function create_symbolic_link() {
     ln -s $2 $1
 }
 
-function create_symbolic_links() {
-    if $no_symlinks ; then
-        echo_verbose "Skipping symbolic links creation"
+function create_links() {
+    if $no_links ; then
+        echo_verbose "Skipping links creation"
     else
-        echo "Creating symbolic links..."
+        echo "Creating links..."
 
         if $zsh_param ; then
-            create_subrepo zsh
-            create_symbolic_link ~/.zshrc     ~/dotfiles/zsh/.zshrc     ".zshrc"
-            git clone https://www.github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+            create_subrepo       zsh
+            create_symbolic_link ~/.zshrc ~/dotfiles/zsh/.zshrc ".zshrc"
+            git clone            https://www.github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
         else
             echo_verbose "Skipping zsh symlinks configuration"
         fi
 
         if $neofetch_param ; then
-            make_dir ~/.config/neofetch
+            create_subrepo       neofetch
+            make_dir             ~/.config/neofetch
             create_symbolic_link ~/.config/neofetch/config.conf ~/dotfiles/neofetch/config.conf "neofetch"
         else
             echo_verbose "Skipping neofetch symlink configuration"
         fi
 
         if $btop_param ; then
-            make_dir ~/.config/btop
+            create_subrepo       btop
+            make_dir             ~/.config/btop
             create_symbolic_link ~/.config/btop/btop.conf ~/dotfiles/btop/btop.conf "btop"
         else
             echo_verbose "Skipping btop symlink configuration"
         fi
+
         if $kde_param ; then
-           echo_verbose "Creating kde symlinks"
+           create_subrepo       kde
            create_symbolic_link ~/.config/kdeglobals         ~/dotfiles/kde/kdeglobals         "kdeglobals"
            create_symbolic_link ~/.config/kglobalshortcutsrc ~/dotfiles/kde/kglobalshortcutsrc "kde shortcuts"
            create_symbolic_link ~/.config/khotkeysrc         ~/dotfiles/kde/khotkeysrc         "kde hotkeys"
@@ -129,6 +134,13 @@ function create_symbolic_links() {
         else
            echo_verbose "Skipping kde symlink configuration"
         fi
+
+        if $terminology_param ; then
+            create_subrepo terminology
+        else
+            echo_verbose "Skipping terminology configuration"
+        fi
+
         if $python_param ; then
            echo_verbose "Creating python alternative link to python3 with python"
            if test -f /bin/python ; then
@@ -368,7 +380,7 @@ function display_parameters() {
         printf "\tVerbose:     $verbose_mode\n"
         printf "\tDebug:       $debug_mode\n"
         printf "\t-----\n"
-        printf "\tno-symlinks:    $no_symlinks\n"
+        printf "\tno-links:    $no_symlinks\n"
         printf "\tno-git-creds:$no_git_creds\n"
         printf "\tno-apt:      $no_apt\n"
         printf "\tno_brew:     $no_brew\n"
@@ -381,6 +393,7 @@ function display_parameters() {
         printf "\tneofetch:    $neofetch_param\n"
         printf "\tbtop:        $btop_param\n"
         printf "\tkde:         $kde_param\n"
+        printf "\tterminology: $terminology_param\n"
         printf "\tpython:      $python_param\n"
         printf "\tsecret:      $secret_git_param\n"
     fi
@@ -407,8 +420,8 @@ if [[ "$@" == *"--help"* ]] || [[ "$@" == *"-h"* ]] ; then
     display_help=true
 fi
 
-if [[ "$@" == *"--symlinks"* ]] ; then
-    no_symlinks=false
+if [[ "$@" == *"--links"* ]] ; then
+    no_links=false
 fi
 if [[ "$@" == *"--git-creds"* ]] ; then
     no_git_creds=false
@@ -464,6 +477,9 @@ fi
 if [[ "$@" == *" kde"* ]] ; then
     kde_param=true
 fi
+if [[ "$@" == *" terminology"* ]] ; then
+    terminology_param=true
+fi
 if [[ "$@" == *" python"* ]] ; then
     python_param=true
 fi
@@ -484,7 +500,7 @@ else
         echo "param received"
     fi
 
-    create_symbolic_links
+    create_links
     setup_kde
 
     if $zsh_param ; then
