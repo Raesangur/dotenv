@@ -135,6 +135,10 @@ ForegroundNormal=252,252,252
 ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
+[DirSelect Dialog]
+DirSelectDialog Size=844,598
+History Items[$e]=file:///media/pascal/46DD-9225
+
 [General]
 BrowserApplication=/home/pascal/.local/share/applications/firefox-4.desktop
 ColorScheme=BreezeDark
