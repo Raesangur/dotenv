@@ -1,0 +1,15 @@
+[submodule "zsh"]
+	path = zsh
+	url = git@github.com:Raesangur/dotfiles_zsh
+[submodule "kde"]
+	path = kde
+	url = git@github.com:Raesangur/dotfiles_kde.git
+[submodule "btop"]
+	path = btop
+	url = git@github.com:Raesangur/dotfiles_btop.git
+[submodule "terminology"]
+	path = terminology
+	url = git@github.com:Raesangur/dotfiles_terminology.git
+[submodule "neofetch"]
+	path = neofetch
+	url = git@github.com:Raesangur/dotfiles_neofetch.git
