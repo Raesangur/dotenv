@@ -16,13 +16,7 @@ python3
 python3-pip
 syslinux
 tcpdump
-<<<<<<< HEAD
-<<<<<<< HEAD
 telnet
 terminology
-=======
->>>>>>> 2547c0b170c950ddca99dc936181db65f5a112e3
-=======
->>>>>>> 2547c0b170c950ddca99dc936181db65f5a112e3
 tor
 vim
