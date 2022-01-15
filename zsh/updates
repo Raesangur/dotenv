@@ -1,0 +1,16 @@
+if test -f /etc/update-motd.d/90-updates-available ; then 
+    /etc/update-motd.d/90-updates-available
+fi
+
+if command -v snap &> /dev/null ; then
+    snap refresh --list 
+fi
+
+if command -v brew &> /dev/null ; then
+    brew_updates=$(brew outdated)
+    if [[ ! ${brew_updates// } ]] ; then 
+        echo "No brew packages to update"
+    else
+        echo $brew_updates
+    fi
+fi
