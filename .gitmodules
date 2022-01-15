@@ -10,6 +10,3 @@
 [submodule "neofetch"]
 	path = neofetch
 	url = git@github.com:Raesangur/dotfiles_neofetch.git
-[submodule "dotfiles_zsh"]
-	path = dotfiles_zsh
-	url = git@github.com:Raesangur/dotfiles_zsh
