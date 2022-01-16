@@ -1,3 +1,4 @@
+apt-transport-https
 bat
 ca-certificates
 cmatrix
@@ -23,3 +24,4 @@ telnet
 terminology
 tor
 vim
+wireguard

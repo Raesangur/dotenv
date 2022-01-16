@@ -232,6 +232,12 @@ function install_apt_packages() {
 function install_extra_apt_packages() {
     echo_verbose "Installing extra apt-packages"
     if $debug_mode ; then
+        echo_debug "Adding \"multiverse\" repository (steam)"
+        sudo add-apt-repository multiverse
+        echo_debug "Adding handbreak ppa repository (handbreak compression software)"
+        sudp add-apt-repository ppa:stebbins/handbrake-releases
+        sudo apt-get update
+
         xargs -a ~/dotfiles/packages/apt-packages-extra sudo apt-get install -y
     else
         xargs -a ~/dotfiles/packages/apt-packages-extra sudo apt-get install -y > /dev/null
@@ -300,7 +306,7 @@ function install_other_packages() {
     read -p "Do you want to install docker? [y/n] " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]] ; then
         echo_verbose "Installing docker"
-        echo_debug "Installing docker's official GPG key (https://download.docker.com/linux/ubuntu/gpg"
+        echo_debug "Installing docker's official GPG key (https://download.docker.com/linux/ubuntu/gpg)"
         if $debug_mode ; then
             curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
             echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list
@@ -309,6 +315,24 @@ function install_other_packages() {
             curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg > /dev/null
             echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
             apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null
+        fi
+    else
+        echo_verbose "Skipping docker installation"
+    fi
+
+
+    echo_verbose "JetBrains Toolbox: "
+    read -p "Do you want to install JetBrains Toolbox? [y/n] " -n 1 -r
+    if [[ $REPLY =~ ^[Yy]$ ]] ; then
+        echo_verbose "Installing toolbox"
+        echo_debug "Downloading unofficial installation script ()"
+        curl https://gist.githubusercontent.com/jen20/218642f3c2cd0e2ce8b6b95ca59e0538/raw/ce378727c8531502b4156a2be37d6149b31710ee/install-jetbrains-toolbox.sh > ./install-jetbrains-toolbox.sh
+        if $debug_mode ; then
+            source ./install-jetbrains-toolbox.sh
+            rm install-jetbrains-toolbox.sh
+        else
+            source ./install-jetbrains-toolbox.sh > /dev/null
+            rm install-jetbrains-toolbox.sh > /dev/null
         fi
     else
         echo_verbose "Skipping docker installation"
