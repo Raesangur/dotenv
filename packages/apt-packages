@@ -1,13 +1,16 @@
 bat
+ca-certificates
 cmatrix
 ffmpeg
 figlet
 firefox
 gcc
+gnupg
 hexedit
 htop
 lm-sensors
 lolcat
+lsb-release
 openssh-client
 openssh-server
 openssl

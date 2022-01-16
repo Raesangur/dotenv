@@ -295,7 +295,24 @@ function install_pip_packages() {
 
 function install_other_packages() {
     echo_verbose "Installing other packages..."
-    echo_verbose "No other packages were configured to be installed"
+
+    echo_verbose "Docker: "
+    read -p "Do you want to install docker? [y/n] " -n 1 -r
+    if [[ $REPLY =~ ^[Yy]$ ]] ; then
+        echo_verbose "Installing docker"
+        echo_debug "Installing docker's official GPG key (https://download.docker.com/linux/ubuntu/gpg"
+        if $debug_mode ; then
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list
+            apt-get install docker-ce docker-ce-cli containerd.io -y
+        else
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg > /dev/null
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+            apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null
+        fi
+    else
+        echo_verbose "Skipping docker installation"
+    fi
 }
 
 function install_packages() {
