@@ -232,8 +232,10 @@ function install_apt_packages() {
 function install_extra_apt_packages() {
     echo_verbose "Installing extra apt-packages"
     if $debug_mode ; then
-        echo_debug "Adding \"multiverse\" repository"
+        echo_debug "Adding \"multiverse\" repository (steam)"
         sudo add-apt-repository multiverse
+        echo_debug "Adding handbreak ppa repository (handbreak compression software)"
+        sudp add-apt-repository ppa:stebbins/handbrake-releases
         sudo apt-get update
 
         xargs -a ~/dotfiles/packages/apt-packages-extra sudo apt-get install -y

@@ -2,8 +2,11 @@ aircrack-ng
 arp-scan
 clang
 ettercap-common
+filezilla
+freecad
 g++
 gimp
+handbrake-gtk
 hashcat
 isomaster
 java-common
@@ -17,7 +20,10 @@ openjdk-11-jre
 plasma-wallpaper-dynamic
 playonlinux
 steam
+thunderbird
+timeshift
 traceroute
+virtualbox
 vlc
 wine
 winetricks
