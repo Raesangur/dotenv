@@ -17,6 +17,7 @@ function show_usage() {
     printf "\t kde              Install kde config files\n"
     printf "\t terminology      Install terminology config files\n"
     printf "\t python           Setup python links in /bin\n"
+    printf "\t vim              Install vim config files\n"
     printf "\tExtra Options: \n"
     printf "\t --links          Configuration of links (symbolic links, subrepositories etc.)\n"
     printf "\t --git-creds      Configuration of git credentials\n"
@@ -57,6 +58,7 @@ btop_param=false
 kde_param=false
 terminology_param=false
 python_param=false
+vim_param=false
 
 function echo_verbose() {
     if $verbose_mode ; then
@@ -156,6 +158,13 @@ function create_links() {
         else
            echo_verbose "Skipping python3 link configuration"
         fi
+
+	if $vim_param ; then
+	    create_subrepo       vim
+	    create_symbolic_link ~/.vimrc ~/dotfiles/vim/.vimrc ".vimrc"
+	else
+	    echo_verbose "Skipping vim configuration"
+	fi
     fi
 }
 
@@ -186,6 +195,9 @@ function create_github_config() {
             echo_verbose "Setting up git email and username in ~/.gitconfig"
             git config --global user.email $git_creds_email
             git config --global user.name $git_creds_user
+
+	    echo "Press [ENTER] to continue"
+	    pause
         fi
     fi
 
@@ -436,6 +448,7 @@ function display_parameters() {
         printf "\tkde:         $kde_param\n"
         printf "\tterminology: $terminology_param\n"
         printf "\tpython:      $python_param\n"
+	printf "\tvim:         $vim_param\n"
         printf "\tsecret:      $secret_git_param\n"
     fi
 }
@@ -523,6 +536,9 @@ if [[ "$@" == *" terminology"* ]] ; then
 fi
 if [[ "$@" == *" python"* ]] ; then
     python_param=true
+fi
+if [[ "$@" == *" vim"* ]] ; then
+    vim_param=true
 fi
 if [[ "$@" == *"--secret_git_param_"* ]] ; then
     secret_git_param=true
