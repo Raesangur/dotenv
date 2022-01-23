@@ -17,7 +17,7 @@ function show_usage() {
     printf "\t kde              Install kde config files\n"
     printf "\t terminology      Install terminology config files\n"
     printf "\t python           Setup python links in /bin\n"
-    printf "\t emacs            Install emacs config files\n"
+    printf "\t micro            Install micro config files\n"
     printf "\tExtra Options: \n"
     printf "\t --links          Configuration of links (symbolic links, subrepositories etc.)\n"
     printf "\t --git-creds      Configuration of git credentials\n"
@@ -58,7 +58,7 @@ btop_param=false
 kde_param=false
 terminology_param=false
 python_param=false
-emacs_param=false
+micro_param=false
 
 function echo_verbose() {
     if $verbose_mode ; then
@@ -159,12 +159,13 @@ function create_links() {
            echo_verbose "Skipping python3 link configuration"
         fi
 
-	if $emacs_param ; then
-            create_subrepo       emacs
-	    make_dir             ~/.emacs.d
-	    create_symbolic_link ~/.emacs.d/init.el ~/dotfiles/emacs/init.el "emacs init file"
+	if $micro_param ; then
+            create_subrepo       micro
+	    make_dir             ~/.config/micro
+	    create_symbolic_link ~/.config/micro/bindings.json ~/dotfiles/micro/bindings.json "micro keybinds"
+            create_symbolic_link ~/.config/micro/settings.json ~/dotfiles/micro/settings.json "micro settings"
 	else
-	    echo_verbose "Skipping emacs configuration"
+	    echo_verbose "Skipping micro configuration"
 	fi
     fi
 }
@@ -484,7 +485,7 @@ function display_parameters() {
         printf "\tkde:         $kde_param\n"
         printf "\tterminology: $terminology_param\n"
         printf "\tpython:      $python_param\n"
-	printf "\temacs:       $emacs_param\n"
+	printf "\tmicro:       $micro_param\n"
         printf "\tsecret:      $secret_git_param\n"
     fi
 }
@@ -573,8 +574,8 @@ fi
 if [[ "$@" == *" python"* ]] ; then
     python_param=true
 fi
-if [[ "$@" == *" emacs"* ]] ; then
-    emacs_param=true
+if [[ "$@" == *" micro"* ]] ; then
+    micro_param=true
 fi
 if [[ "$@" == *"--secret_git_param_"* ]] ; then
     secret_git_param=true

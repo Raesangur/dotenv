@@ -13,3 +13,6 @@
 [submodule "zsh"]
 	path = zsh
 	url = git@github.com:Raesangur/dotfiles_zsh.git
+[submodule "micro"]
+	path = micro
+	url = git@github.com:Raesangur/dotfiles_micro.git
