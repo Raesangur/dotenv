@@ -13,12 +13,3 @@
 [submodule "zsh"]
 	path = zsh
 	url = git@github.com:Raesangur/dotfiles_zsh.git
-[submodule "vim"]
-	path = vim
-	url = git@github.com:raesangur/dotfiles_vim.git
-[submodule "dotfiles_emacs"]
-	path = dotfiles_emacs
-	url = git@github.com:Raesangur/dotfiles_emacs.git
-[submodule "emacs"]
-	path = emacs
-	url = git@github.com:Raesangur/dotfiles_emacs.git
