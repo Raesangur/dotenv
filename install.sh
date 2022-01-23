@@ -315,6 +315,21 @@ function install_pip_packages() {
 function install_other_packages() {
     echo_verbose "Installing other packages..."
 
+	echo_verbose "micro: "
+	read -p "Do you want to install docker? [y/n] " -n 1 -r
+    if [[ $REPLY =~ ^[Yy]$ ]] ; then
+        echo_verbose "Installing micro"
+        if $debug_mode ; then
+            curl https://getmic.ro | bash
+            mv micro ~/.local/bin
+        else
+            curl https://getmic.ro | bash >> /dev/null
+            mv micro ~/.local/bin >> /dev/null
+        fi
+    else
+        echo_verbose "Skipping micro installation"
+    fi
+
     echo_verbose "Docker: "
     read -p "Do you want to install docker? [y/n] " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]] ; then
@@ -349,6 +364,26 @@ function install_other_packages() {
         fi
     else
         echo_verbose "Skipping docker installation"
+    fi
+
+    echo_verbose "Sublime Text: "
+    read -p "Do you want to install Sublime Text? [y/n] " -n 1 -r
+    if [[ $REPLY =~ ^[Yy]$ ]] ; then
+        echo_verbose "Installing Sublime Text"
+        echo_debug "Downloading GPG key"
+        if $debug_mod ; then
+            wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
+            echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
+            apt-get update
+            apt-get install sublime-text -y
+        else
+            wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add - > /dev/null
+            echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list > /dev/null
+            apt-get update > /dev/null
+            apt-get install sublime-text -y > /dev/null
+        fi
+    else
+        echo_verbose "Skipping sublime text installation"
     fi
 }
 
