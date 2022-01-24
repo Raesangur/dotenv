@@ -182,7 +182,7 @@ function create_github_config() {
             read git_creds_email -p "Email"
             read git_creds_user -p "Username"
             echo_verbose "Creating SSH key"
-	    ssh-keygen -t ed25519 -C $git_creds_email
+	        ssh-keygen -t ed25519 -C $git_creds_email
 
             echo_verbose "Starting SSH agent and adding newly generated SSH key"
             eval "$(ssh-agent -s)"
@@ -198,8 +198,8 @@ function create_github_config() {
             git config --global user.email $git_creds_email
             git config --global user.name $git_creds_user
 
-	    echo "Press [ENTER] to continue"
-	    pause
+	        echo "Press [ENTER] to continue"
+	        pause
         fi
     fi
 
