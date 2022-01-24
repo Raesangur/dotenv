@@ -316,16 +316,20 @@ function install_pip_packages() {
 function install_other_packages() {
     echo_verbose "Installing other packages..."
 
-	echo_verbose "micro: "
-	read -p "Do you want to install docker? [y/n] " -n 1 -r
+    echo_verbose "micro: "
+    read -p "Do you want to install micro text editor? [y/n] " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]] ; then
         echo_verbose "Installing micro"
         if $debug_mode ; then
             curl https://getmic.ro | bash
-            mv micro ~/.local/bin
+            chmod +x micro/micro
+            mv micro/micro ~/.local/bin
+            rmdir micro
         else
             curl https://getmic.ro | bash >> /dev/null
-            mv micro ~/.local/bin >> /dev/null
+            chmod +x micro/micro >> /dev/null
+            mv micro/micro ~/.local/bin >> /dev/null
+            rmdir micro
         fi
     else
         echo_verbose "Skipping micro installation"
