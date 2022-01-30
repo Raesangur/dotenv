@@ -246,8 +246,6 @@ function install_apt_packages() {
 function install_extra_apt_packages() {
     echo_verbose "Installing extra apt-packages"
     if $debug_mode ; then
-        echo_debug "Adding \"multiverse\" repository (steam)"
-        sudo add-apt-repository multiverse
         echo_debug "Adding handbreak ppa repository (handbreak compression software)"
         sudp add-apt-repository ppa:stebbins/handbrake-releases
         sudo apt-get update
@@ -390,6 +388,31 @@ function install_other_packages() {
     else
         echo_verbose "Skipping sublime text installation"
     fi
+
+
+    echo_verbose "Steam: "
+    read -p "Do you want to install and login into Steam? [y/n] " -n 1 -r
+    if [[ $REPLY =~ ^[Yy]$ ]] ; then
+        echo_verbose "Installing Steam"
+        echo_debug "Adding \"multiverse\" repository (steam)"
+        if $debug_mod ; then
+            sudo add-apt-repository multiverse
+            sudo apt update
+            sudo apt install steam -y
+        else
+            sudo add-apt-repository multiverse > /dev/null
+            sudo apt update > /dev/null
+            sudo apt install steam -y > /dev/null
+        fi
+
+        read -p "Do you want to login into steam now (exit steam to continue installation)? [y/n] " -n 1 -r
+        if [[ $REPLY =~ ^[Yy]$ ]] ; then
+	        echo "EXIT STEAM TO CONTINUE INSTALLATION"
+	        steam
+	    fi
+    else
+        echo_verbose "Skipping steam installation"
+    fi    
 }
 
 function install_packages() {
