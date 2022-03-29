@@ -1,6 +1,7 @@
 apt-transport-https
 bat
 ca-certificates
+ccache
 cmatrix
 ffmpeg
 figlet

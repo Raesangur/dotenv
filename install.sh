@@ -428,6 +428,9 @@ function install_packages() {
             dpkg --configure -a > /dev/null
         fi
 
+        echo_verbose "Installing python ppa repository"
+        sudo add-apt-repository ppa:deadsnakes/ppa
+
         echo_verbose "Updating apt repository..."
         if $debug_mode ; then
             sudo apt-get update
