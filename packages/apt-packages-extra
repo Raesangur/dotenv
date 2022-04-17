@@ -1,6 +1,7 @@
 aircrack-ng
 arp-scan
 clang
+doxygen
 ettercap-common
 filezilla
 freecad
@@ -13,6 +14,7 @@ java-common
 john
 meson
 mkisofs
+mono-complete
 netcat
 ninja
 nmap

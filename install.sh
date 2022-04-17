@@ -160,10 +160,10 @@ function create_links() {
         fi
 
 	if $micro_param ; then
-            create_subrepo       micro
-	    make_dir             ~/.config/micro
-	    create_symbolic_link ~/.config/micro/bindings.json ~/dotfiles/micro/bindings.json "micro keybinds"
-            create_symbolic_link ~/.config/micro/settings.json ~/dotfiles/micro/settings.json "micro settings"
+        create_subrepo       micro
+		make_dir             ~/.config/micro
+		create_symbolic_link ~/.config/micro/bindings.json ~/dotfiles/micro/bindings.json "micro keybinds"
+        create_symbolic_link ~/.config/micro/settings.json ~/dotfiles/micro/settings.json "micro settings"
 	else
 	    echo_verbose "Skipping micro configuration"
 	fi
@@ -321,12 +321,12 @@ function install_other_packages() {
         if $debug_mode ; then
             curl https://getmic.ro | bash
             chmod +x micro/micro
-            mv micro/micro ~/.local/bin
+            mv micro/micro ~/.local/bin/micro
             rmdir micro
         else
             curl https://getmic.ro | bash >> /dev/null
             chmod +x micro/micro >> /dev/null
-            mv micro/micro ~/.local/bin >> /dev/null
+            mv micro/micro ~/.local/bin/micro >> /dev/null
             rmdir micro
         fi
     else
