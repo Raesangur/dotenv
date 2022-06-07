@@ -444,7 +444,7 @@ function install_other_packages() {
         echo_verbose "Installing Google Drive Text"
         if $debug_mod ; then
         	echo_verbose "Cloning git repository from git://anongit.kde.org/kio-gdrive.git"
-            git clone https://anongit.kde.org/kio-gdrive.git
+            git clone git://anongit.kde.org/kio-gdrive.git
             cd kio-gdrive ; mkdir build && cd build
             echo_verbose "Building kio-gdrive..."
             cmake -DCMAKE_INSTALL_PREFIX=/usr .. ; sudo make install
