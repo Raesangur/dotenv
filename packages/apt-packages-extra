@@ -1,9 +1,13 @@
 aircrack-ng
 arp-scan
+bc
+bison
 clang
 doxygen
 ettercap-common
+fakeroot
 filezilla
+flex
 freecad
 g++
 gimp
@@ -12,7 +16,10 @@ hashcat
 isomaster
 java-common
 john
+libelf-dev
+libssl-dev
 lynx
+ncurses-dev
 meson
 mkisofs
 mono-complete
@@ -31,3 +38,4 @@ wine32
 wine
 winetricks
 wireshark
+xz-utils
