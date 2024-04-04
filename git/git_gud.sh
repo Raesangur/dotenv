@@ -1,4 +1,4 @@
-git add *
+git add -A
 
 if [ $# -eq 0 ] ; then
     echo 'Enter the commit message:'
@@ -8,7 +8,7 @@ else
 fi
 
 
-git commit -m "$commitMessage"
+git commit -S -m "$commitMessage"
 
 git push
 
